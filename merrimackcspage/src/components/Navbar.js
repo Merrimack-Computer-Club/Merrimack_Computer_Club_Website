@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Container } from '@mantine/core';
+import { Button } from '@mantine/core';
 import '../css/navbar.css';
 
 /* Nav bar reference: https://www.w3schools.com/css/css_navbar_horizontal.asp */

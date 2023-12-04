@@ -5,6 +5,7 @@ body {
 
 /* Nav bar reference: https://www.w3schools.com/css/css_navbar_horizontal.asp */
 ul {
+    z-index: 1000;
     list-style-type: none;
     margin: 0;
     padding: 0;
