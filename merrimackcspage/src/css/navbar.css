@@ -1,0 +1,46 @@
+body {
+    margin: 0;
+    padding-top: 50px; /* Adjust this value according to your navbar height */
+}
+
+/* Nav bar reference: https://www.w3schools.com/css/css_navbar_horizontal.asp */
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: white;
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+ul Button {
+    margin: 20px;
+    float: right;
+    font-family: var(--poppinsBold);
+    color: white;
+}
+
+ul Button h1{
+   font-size: var(--smallFont);
+}
+
+li {
+    padding-top: 20px;
+    float: left;
+}
+
+li a {
+    display: block;
+    color: black;
+    font-family: var(--poppinsBold);
+    font-size: var(--mediumFont);
+    text-align: center;
+    padding: 0px 16px;
+    text-decoration: none;
+}
+
+li a span:hover {
+    border-bottom: 5px blue solid;
+}
