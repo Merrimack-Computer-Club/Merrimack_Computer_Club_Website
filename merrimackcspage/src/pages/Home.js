@@ -1,8 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../css/home.css";
 import { Container, Input, Button } from "@mantine/core";
-import { useEffect, useState } from 'react';
-import { getFirestore, collection, addDoc } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, getDocs } from 'firebase/firestore';
 import { app as firebaseApp } from './firebaseConfig';
 
 function Home() {
@@ -13,8 +12,9 @@ function Home() {
     subject: '',
     tags: '',
   });
+  const [knowledgeBase, setKnowledgeBase] = useState([]);
 
-  // On initial render, this useeffect runs and gets the scroll position. Once the user scrolls, the blurring in the blur div will activate
+  // On initial render, this useEffect runs and gets the scroll position. Once the user scrolls, the blurring in the blur div will activate
   useEffect(() => {
     const handleScroll = () => {
       setScrollPosition(window.scrollY);
@@ -25,6 +25,19 @@ function Home() {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const db = getFirestore(firebaseApp);
+      const knowledgeBaseCollection = collection(db, 'sections');
+      const snapshot = await getDocs(knowledgeBaseCollection);
+
+      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setKnowledgeBase(data);
+    };
+
+    fetchData();
   }, []);
 
   const handleFormSubmit = async (e) => {
@@ -63,7 +76,21 @@ function Home() {
             <h1 className="title animate-charcter">
               Computer Science Knowledge Base
             </h1>
+           
           </Container>
+           <Container className="fluid">
+  <ol>
+    {knowledgeBase.map((entry) => (
+      <li key={entry.id}>
+        <strong>Description:</strong> {entry.description}<br />
+        <strong>Resource Link:</strong> <a href={entry.resource} target="_blank" rel="noopener noreferrer">{entry.resource}</a><br />
+        <strong>Subject:</strong> {entry.subject}<br />
+        <strong>Tags:</strong> {entry.tags}<br />
+        <br />
+      </li>
+    ))}
+  </ol>
+</Container>
         </Container>
       </div>
 
@@ -89,6 +116,7 @@ function Home() {
           <span>thinking.</span>
         </h1>
       </Container>
+     
 
       <Container className="blurdiv">
         <form onSubmit={handleFormSubmit}>
@@ -123,6 +151,8 @@ function Home() {
           />
           <Button type="submit">Add to Knowledgebase</Button>
         </form>
+
+        
       </Container>
     </div>
   );
