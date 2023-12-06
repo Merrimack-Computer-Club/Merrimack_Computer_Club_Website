@@ -1,30 +1,13 @@
 import React from "react";
 import "../css/home.css";
-import { Container } from "@mantine/core";
+import { Container, Input, Button } from "@mantine/core";
 import {useEffect, useState} from 'react'
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getFirestore, collection, addDoc } from 'firebase/firestore';
+import { app as firebaseApp } from './firebaseConfig';
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyCouKKUiY3ilrHpL4kD-OPGRAUgDLz55WY",
-  authDomain: "web-development-final-7dd3e.firebaseapp.com",
-  projectId: "web-development-final-7dd3e",
-  storageBucket: "web-development-final-7dd3e.appspot.com",
-  messagingSenderId: "1052801351450",
-  appId: "1:1052801351450:web:bbc233e000af622e1c76a3",
-  measurementId: "G-01RZWR8R4S"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 function Home() {
   const [scrollPosition, setScrollPosition] = useState(0);
+  const [formData, setFormData] = useState({ title: '', content: '' });
 
   // On initial render, this useeffect runs and gets the scroll position. Once the user scrolls, the blurring in the blur div will activate
   useEffect(() => {
@@ -38,6 +21,24 @@ function Home() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+
+    // Get a reference to the Firestore database
+    const db = getFirestore(firebaseApp);
+
+    // Add a new document with the form data to the "sections" collection
+    await addDoc(collection(db, 'sections'), formData);
+
+    // Reset the form data
+    setFormData({ title: '', content: '' });
+  };
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+
   
   return (
     <div>
@@ -79,6 +80,23 @@ function Home() {
           <span>own</span>
           <span>thinking.</span>
         </h1>
+        </Container>
+        <Container className="blurdiv">
+        <form onSubmit={handleFormSubmit}>
+          <Input
+            label="Title"
+            name="title"
+            value={formData.title}
+            onChange={handleInputChange}
+          />
+          <Input
+            label="Content"
+            name="content"
+            value={formData.content}
+            onChange={handleInputChange}
+          />
+          <Button type="submit">Add to Knowledgebase</Button>
+        </form>
       </Container>
 
     </div>
