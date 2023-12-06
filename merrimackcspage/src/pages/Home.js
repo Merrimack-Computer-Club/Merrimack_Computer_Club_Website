@@ -1,13 +1,18 @@
 import React from "react";
 import "../css/home.css";
 import { Container, Input, Button } from "@mantine/core";
-import {useEffect, useState} from 'react'
+import { useEffect, useState } from 'react';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import { app as firebaseApp } from './firebaseConfig';
 
 function Home() {
   const [scrollPosition, setScrollPosition] = useState(0);
-  const [formData, setFormData] = useState({ title: '', content: '' });
+  const [formData, setFormData] = useState({ 
+    description: '',
+    resource: '',
+    subject: '',
+    tags: '',
+  });
 
   // On initial render, this useeffect runs and gets the scroll position. Once the user scrolls, the blurring in the blur div will activate
   useEffect(() => {
@@ -21,25 +26,29 @@ function Home() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
-    // Get a reference to the Firestore database
     const db = getFirestore(firebaseApp);
 
     // Add a new document with the form data to the "sections" collection
     await addDoc(collection(db, 'sections'), formData);
 
     // Reset the form data
-    setFormData({ title: '', content: '' });
+    setFormData({
+      description: '',
+      resource: '',
+      subject: '',
+      tags: '',
+    });
   };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-
-  
   return (
     <div>
       <div
@@ -58,9 +67,8 @@ function Home() {
         </Container>
       </div>
 
-{/* Reference https://codepen.io/alvarotrigo/pen/ExvqdNa */}
       <Container className="blurdiv">
-      <h1 className={`blur ${scrollPosition > 100 ? "scrolled" : ""}`}>
+        <h1 className={`blur ${scrollPosition > 100 ? "scrolled" : ""}`}>
           <span>There</span>
           <span>are</span>
           <span>no</span>
@@ -80,25 +88,42 @@ function Home() {
           <span>own</span>
           <span>thinking.</span>
         </h1>
-        </Container>
-        <Container className="blurdiv">
+      </Container>
+
+      <Container className="blurdiv">
         <form onSubmit={handleFormSubmit}>
           <Input
-            label="Title"
-            name="title"
-            value={formData.title}
+            label="Description"
+            name="description"
+            multiline
+            value={formData.description}
             onChange={handleInputChange}
+            placeholder="Enter Description"
           />
           <Input
-            label="Content"
-            name="content"
-            value={formData.content}
+            label="Resource Link"
+            name="resource"
+            value={formData.resource}
             onChange={handleInputChange}
+            placeholder="Enter Resource Link"
+          />
+          <Input
+            label="Subject"
+            name="subject"
+            value={formData.subject}
+            onChange={handleInputChange}
+            placeholder="Enter Subject"
+          />
+          <Input
+            label="Tags"
+            name="tags"
+            value={formData.tags}
+            onChange={handleInputChange}
+            placeholder="Enter Tags"
           />
           <Button type="submit">Add to Knowledgebase</Button>
         </form>
       </Container>
-
     </div>
   );
 }
