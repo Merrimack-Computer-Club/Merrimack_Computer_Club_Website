@@ -27,7 +27,7 @@ function StockVideo() {
 
   return (
 
-    <video className="video" src={video_srcs[current_video]} autoPlay loop muted/>
+    <video className="video" src={video_srcs[current_video]} autoPlay loop muted playsinline/>
 
   )
 }
