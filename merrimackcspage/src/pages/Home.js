@@ -78,7 +78,7 @@ function Home() {
         <Container fluid>
           <Row>
             <Col>
-              <h1 className="title animate-charcter">
+              <h1 style={{margin: `3rem 10px 10px 10px`}} className="title animate-charcter">
                 Computer Science Knowledge Base
               </h1>
             </Col>
