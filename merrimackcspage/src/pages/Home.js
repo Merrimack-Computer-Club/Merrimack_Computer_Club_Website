@@ -4,6 +4,7 @@ import { getFirestore, collection, addDoc, getDocs } from 'firebase/firestore';
 import { app as firebaseApp } from './firebaseConfig';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/home.css";
+import StockVideo from "../components/StockVideo";
 
 function Home() {
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -70,20 +71,24 @@ function Home() {
     <div>
       <div
         style={{
-          backgroundColor: "lightgrey",
-          paddingBottom: "40px",
-          height: "80vh",
+          backgroundColor: "transparent",
+          height: "55rem",
         }}
       >
         <Container fluid>
           <Row>
             <Col>
-              <h1 className="title animate-charcter">
-                Computer Science Knowledge Base
+            <div style={{margin: `3rem 10px 10px 10px`, backgroundColor: `rgb(255 255 255 / 15%)`, paddingLeft: "30px", paddingRight: "30px", borderRadius: `10px`, inlineSize: `min-content`}}>
+              <h1 style={{}} className="title animate-charcter">
+                Merrimack Computer Club
               </h1>
+            </div>
             </Col>
           </Row>
         </Container>
+
+        <StockVideo></StockVideo>
+        
       </div>
 
       <Container className= "fluid">
