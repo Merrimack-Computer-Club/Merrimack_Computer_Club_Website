@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { Container, Button, Row, Col, Form } from "react-bootstrap"; // Updated import statements
-import { getFirestore, collection, addDoc, getDocs } from 'firebase/firestore';
+import React, { useEffect, useState, selectedEntry } from "react";
+import { Container, Button, Row, Col, Form } from "react-bootstrap";
 import { app as firebaseApp } from './firebaseConfig';
+import { getFirestore, collection, addDoc, getDocs, query, where } from 'firebase/firestore';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/home.css";
 import StockVideo from "../components/StockVideo";
@@ -15,8 +15,20 @@ function Home() {
     tags: '',
   });
   const [knowledgeBase, setKnowledgeBase] = useState([]);
+  const [comments, setComments] = useState({});
+  const [commentFormData, setCommentFormData] = useState({
+    comment: '',
+  });
+  const [selectedEntry, setSelectedEntry] = useState(null);
 
-  // On initial render, this useEffect runs and gets the scroll position. Once the user scrolls, the blurring in the blur div will activate
+  const handleEntryClick = (entryId) => {
+    // Set the selected entry when clicked
+    setSelectedEntry(entryId);
+
+    // Load comments for the selected entry
+    loadComments(entryId);
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       setScrollPosition(window.scrollY);
@@ -46,11 +58,8 @@ function Home() {
     e.preventDefault();
 
     const db = getFirestore(firebaseApp);
-
-    // Add a new document with the form data to the "sections" collection
     await addDoc(collection(db, 'sections'), formData);
 
-    // Reset the form data
     setFormData({
       description: '',
       resource: '',
@@ -58,14 +67,50 @@ function Home() {
       tags: '',
     });
   };
-  function isImageUrl(url) {
-    return /\.(jpeg|jpg|gif|png)$/.test(url);
-  }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
+    function isImageUrl(url) {
+    return /\.(jpeg|jpg|gif|png)$/.test(url);
+  }
+
+  const handleCommentSubmit = async (entryId, e) => {
+    e.preventDefault();
+
+    const db = getFirestore(firebaseApp);
+    const commentCollection = collection(db, 'comments');
+
+    await addDoc(commentCollection, {
+      entryId,
+      comment: commentFormData.comment,
+    });
+
+    setCommentFormData({
+      comment: '',
+    });
+  };
+
+  const loadComments = async (entryId) => {
+    try {
+      const db = getFirestore(firebaseApp);
+      const commentCollection = collection(db, 'comments');
+      const q = query(commentCollection, where('entryId', '==', entryId));
+      const querySnapshot = await getDocs(q);
+
+      const entryComments = querySnapshot.docs.map(doc => doc.data());
+      setComments(prevComments => ({ ...prevComments, [entryId]: entryComments }));
+    } catch (error) {
+      console.error('Error loading comments:', error);
+    }
+  };
+
+  useEffect(() => {
+    knowledgeBase.forEach(entry => loadComments(entry.id));
+  }, [knowledgeBase]);
+
+  const selectedEntryData = selectedEntry ? knowledgeBase.find(entry => entry.id === selectedEntry) : null;
 
   return (
     <div>
@@ -78,44 +123,68 @@ function Home() {
         <Container fluid>
           <Row>
             <Col>
-            <div style={{margin: `3rem 10px 10px 10px`, backgroundColor: `rgb(255 255 255 / 15%)`, paddingLeft: "30px", paddingRight: "30px", borderRadius: `10px`, inlineSize: `min-content`}}>
-              <h1 style={{}} className="title animate-charcter">
-                Merrimack Computer Club
-              </h1>
-            </div>
+              <div style={{ margin: `3rem 10px 10px 10px`, backgroundColor: `rgb(255 255 255 / 15%)`, paddingLeft: "30px", paddingRight: "30px", borderRadius: `10px`, inlineSize: `min-content` }}>
+                <h1 style={{}} className="title animate-charcter">
+                  Merrimack Computer Club
+                </h1>
+              </div>
             </Col>
           </Row>
         </Container>
 
         <StockVideo></StockVideo>
-        
+
       </div>
 
-      <Container className= "fluid">
+      <Container className="fluid">
         <Row>
           <Col>
-          <ol>
-  {knowledgeBase.map((entry) => (
-    <li key={entry.id}>
-      <strong>Description:</strong> {entry.description}<br />
-      {isImageUrl(entry.resource) ? (
-        <img src={entry.resource} alt="Resource" style={{ maxWidth: '100%', maxHeight: '200px' }} />
-      ) : (
-        <a href={entry.resource} target="_blank" rel="noopener noreferrer">{entry.resource}</a>
-      )}
-      <br />
-      {isImageUrl(entry.resource) && (
-        <React.Fragment>
-          <strong>Resource Link:</strong> <a href={entry.resource} target="_blank" rel="noopener noreferrer">{entry.resource}</a><br />
-        </React.Fragment>
-      )}
-      <strong>Subject:</strong> {entry.subject}<br />
-      <strong>Tags:</strong> {entry.tags}<br />
-      <br />
-    </li>
-  ))}
-</ol>
+            <ol>
+            {knowledgeBase.map((entry) => (
+  <li key={entry.id}>
+    <strong>Description:</strong> {entry.description}<br />
 
+    {/* Show resource link */}
+    <strong>Resource Link:</strong> {isImageUrl(entry.resource) ? (
+      <img src={entry.resource} alt="Resource" style={{ width: '100%', maxHeight: '500px' }} />
+    ) : (
+      <a href={entry.resource} target="_blank" rel="noopener noreferrer">{entry.resource}</a>
+    )}
+    <br />
+
+    {isImageUrl(entry.resource) && (
+      <React.Fragment>
+        <br />
+      </React.Fragment>
+    )}
+
+    {/* Comments section */}
+    <div>
+      <h3>Comments</h3>
+      <ul>
+        {comments[entry.id] && comments[entry.id].map((comment, index) => (
+          <li key={index}>{comment.comment}</li>
+        ))}
+      </ul>
+      {/* Comment form */}
+      <form onSubmit={(e) => handleCommentSubmit(entry.id, e)}>
+        <Form.Control
+          label="Comment"
+          name="comment"
+          as="textarea"
+          rows={2}
+          value={commentFormData.comment}
+          onChange={(e) => setCommentFormData({ comment: e.target.value })}
+          placeholder="Enter your comment"
+        />
+        <Button type="submit">Add Comment</Button>
+      </form>
+    </div>
+    <br />
+  </li>
+))}
+
+            </ol>
           </Col>
         </Row>
       </Container>
