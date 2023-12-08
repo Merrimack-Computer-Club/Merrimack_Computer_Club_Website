@@ -152,37 +152,32 @@ function Home() {
     )}
     <br />
 
-    {isImageUrl(entry.resource) && (
-      <React.Fragment>
-        <br />
-      </React.Fragment>
-    )}
-
     {/* Comments section */}
     <div>
-      <h3>Comments</h3>
-      <ul>
+      <strong>Comments:</strong>
         {comments[entry.id] && comments[entry.id].map((comment, index) => (
           <li key={index}>{comment.comment}</li>
         ))}
-      </ul>
-      {/* Comment form */}
-      <form onSubmit={(e) => handleCommentSubmit(entry.id, e)}>
-        <Form.Control
-          label="Comment"
-          name="comment"
-          as="textarea"
-          rows={2}
-          value={commentFormData.comment}
-          onChange={(e) => setCommentFormData({ comment: e.target.value })}
-          placeholder="Enter your comment"
-        />
-        <Button type="submit">Add Comment</Button>
-      </form>
     </div>
+
+    {/* Comment form */}
+    <form onSubmit={(e) => handleCommentSubmit(entry.id, e)}>
+      <Form.Control
+        label="Comment"
+        name="comment"
+        as="textarea"
+        rows={2}
+        value={commentFormData.comment}
+        onChange={(e) => setCommentFormData({ comment: e.target.value })}
+        placeholder="Enter your comment"
+      />
+      <Button type="submit">Add Comment</Button>
+    </form>
     <br />
   </li>
 ))}
+
+
 
             </ol>
           </Col>
