@@ -145,7 +145,7 @@ function Home() {
     <strong>Description:</strong> {entry.description}<br />
 
     {/* Show resource link */}
-    <strong>Resource Link:</strong> {isImageUrl(entry.resource) ? (
+    <strong>Resource:</strong> {isImageUrl(entry.resource) ? (
       <img src={entry.resource} alt="Resource" style={{ width: '100%', maxHeight: '500px' }} />
     ) : (
       <a href={entry.resource} target="_blank" rel="noopener noreferrer">{entry.resource}</a>
