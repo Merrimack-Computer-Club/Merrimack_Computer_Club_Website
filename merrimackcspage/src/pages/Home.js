@@ -123,6 +123,7 @@ function Home() {
 
 
   const handleFormSubmit = async (e) => {
+    /*
     e.preventDefault();
 
     const db = getFirestore(firebaseApp);
@@ -134,6 +135,7 @@ function Home() {
       subject: '',
       tags: '',
     });
+    */
   };
 
   const handleInputChange = (e) => {
