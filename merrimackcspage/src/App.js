@@ -9,6 +9,7 @@ import Navbar from "./components/Navbar";
 import Home from './pages/Home'
 import Blog from './pages/Blog'
 import Login from './pages/Login'
+import User from './pages/User'
 
 import {
   BrowserRouter as Router,
@@ -29,6 +30,7 @@ function App() {
             <Route exact path="/" element={<Home />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/user" element={<User />} />
           </Routes>
         </Router>
       </MantineProvider>
