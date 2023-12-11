@@ -1,60 +1,134 @@
 import React, { useEffect, useState } from "react";
-import { Container, Button, Row, Col, Form } from "react-bootstrap"; // Updated import statements
-import { getFirestore, collection, addDoc, getDocs } from 'firebase/firestore';
+import { Container, Button, Row, Col, Form } from "react-bootstrap";
 import { app as firebaseApp } from './firebaseConfig';
+import { getFirestore, collection, addDoc, getDocs, query, where, doc, onSnapshot } from 'firebase/firestore';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/home.css";
 import StockVideo from "../components/StockVideo";
 
 function Home() {
-  const [scrollPosition, setScrollPosition] = useState(0);
+
+  // const dummyKnowledgeBase = [
+  //   {
+  //     id: 1,
+  //     description: 'Description for entry 1',
+  //     resource: 'https://via.placeholder.com/400x300.png'
+  //   },
+  //   {
+  //     id: 2,
+  //     description: 'Description for entry 2',
+  //     resource: 'https://via.placeholder.com/400x300.png'
+  //   },
+  //   {
+  //     id: 3,
+  //     description: 'Description for entry 1',
+  //     resource: 'https://via.placeholder.com/400x300.png'
+  //   },
+  //   {
+  //     id: 4,
+  //     description: 'Description for entry 2',
+  //     resource: 'https://example.com/resource2',
+  //   },
+  //   {
+  //     id: 5,
+  //     description: 'Description for entry 1',
+  //     resource: 'https://example.com/resource1',
+  //   },
+  //   {
+  //     id: 6,
+  //     description: 'Description for entry 2',
+  //     resource: 'https://example.com/resource2',
+  //   },
+  // ];
+  // setKnowledgeBase(dummyKnowledgeBase)
+
+  const db = getFirestore(firebaseApp);
+
+  const [triggerBlur, setTriggerBlur] = useState(false)
+  const [knowledgeBase, setKnowledgeBase] = useState([]);
+  const [commentCollection, setCommentCollection] = useState([])
+  const [comments, setComments] = useState({});
+  const [commentFormData, setCommentFormData] = useState({
+    comment: '',
+  });
+  const [selectedEntry, setSelectedEntry] = useState(null);
+
   const [formData, setFormData] = useState({
     description: '',
     resource: '',
     subject: '',
     tags: '',
   });
-  const [knowledgeBase, setKnowledgeBase] = useState([]);
 
-  // On initial render, this useEffect runs and gets the scroll position. Once the user scrolls, the blurring in the blur div will activate
+  const handleEntryClick = (entryId) => {
+    // Set the selected entry when clicked
+    setSelectedEntry(entryId);
+
+    // Load comments for the selected entry
+    loadComments(entryId);
+  };
+
+  // Runs on initial render
   useEffect(() => {
+
+    // Adds scroll listener to window to check when the user scrolls, and then triggers the blur on the div after the user has scrolled a bit
     const handleScroll = () => {
-      setScrollPosition(window.scrollY);
+      const scrollY = window.scrollY || window.pageYOffset;
+      const triggerPosition = 200; // Adjust this value as needed
+
+      if (scrollY > triggerPosition) {
+        setTriggerBlur(true);
+        window.removeEventListener('scroll', handleScroll);
+      }
     };
+    window.addEventListener('scroll', handleScroll);
 
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  useEffect(() => {
-
-    /**
-    const fetchData = async () => {
-      //const db = getFirestore(firebaseApp);
-      const knowledgeBaseCollection = collection(db, 'sections');
-      const snapshot = await getDocs(knowledgeBaseCollection);
-
-      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const knowledgeBase = onSnapshot(collection(db, "sections"), async (querySnapshot) => {
+      const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setKnowledgeBase(data);
-    };
+      const kb = [];
+      querySnapshot.forEach((doc) => {
+        kb.push(doc.data());
+      });
+      console.log("Current values in knowledge base are: ", kb);
+    });
 
-    fetchData();
-    */
+   
+
+    const comments = onSnapshot(collection(db, "comments"), async (querySnapshot) => {
+      setCommentCollection(querySnapshot);
+    });
+
   }, []);
+
+  // Runs whenever the knowledge base or comments change in the db
+  useEffect(() => {
+    knowledgeBase.forEach(entry => loadComments(entry.id));
+  }, [ knowledgeBase, commentCollection]);
+
+  // Function that loads in comments to specific entries
+  const loadComments = async (entryId) => {
+    try {
+        const commentCollection = collection(db, 'comments');
+        const q = query(commentCollection, where('entryId', '==', entryId));
+        const querySnapshot = await getDocs(q);
+
+        const entryComments = querySnapshot.docs.map(doc => doc.data());
+        setComments(prevComments => ({ ...prevComments, [entryId]: entryComments }));
+      } catch (error) {
+        console.error('Error loading comments:', error);
+      }
+  };
+
+
 
   const handleFormSubmit = async (e) => {
     /*
     e.preventDefault();
 
     const db = getFirestore(firebaseApp);
-
-    // Add a new document with the form data to the "sections" collection
     await addDoc(collection(db, 'sections'), formData);
 
-    // Reset the form data
     setFormData({
       description: '',
       resource: '',
@@ -63,14 +137,32 @@ function Home() {
     });
     */
   };
-  function isImageUrl(url) {
-    return /\.(jpeg|jpg|gif|png)$/.test(url);
-  }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
+  function isImageUrl(url) {
+    return /\.(jpeg|jpg|gif|png)$/.test(url);
+  }
+
+  const handleCommentSubmit = async (entryId, e) => {
+    e.preventDefault();
+
+    const db = getFirestore(firebaseApp);
+    const commentCollection = collection(db, 'comments');
+
+    await addDoc(commentCollection, {
+      entryId,
+      comment: commentFormData.comment,
+    });
+
+    setCommentFormData({
+      comment: '',
+    });
+  };
+
+  const selectedEntryData = selectedEntry ? knowledgeBase.find(entry => entry.id === selectedEntry) : null;
 
   return (
     <div>
@@ -83,53 +175,24 @@ function Home() {
         <Container fluid>
           <Row>
             <Col>
-            <div style={{margin: `3rem 10px 10px 10px`, backgroundColor: `rgb(255 255 255 / 15%)`, paddingLeft: "30px", paddingRight: "30px", borderRadius: `10px`, inlineSize: `min-content`}}>
-              <h1 style={{}} className="title animate-charcter">
-                Merrimack Computer Club
-              </h1>
-            </div>
+              <div style={{ margin: `3rem 10px 10px 10px`, backgroundColor: `rgb(255 255 255 / 15%)`, paddingLeft: "30px", paddingRight: "30px", borderRadius: `10px`, inlineSize: `min-content` }}>
+                <h1 style={{}} className="title animate-charcter">
+                  Merrimack Computer Club
+                </h1>
+              </div>
             </Col>
           </Row>
         </Container>
 
         <StockVideo></StockVideo>
-        
+
       </div>
-
-      <Container className= "fluid">
-        <Row>
-          <Col>
-          <ol>
-  {knowledgeBase.map((entry) => (
-    <li key={entry.id}>
-      <strong>Description:</strong> {entry.description}<br />
-      {isImageUrl(entry.resource) ? (
-        <img src={entry.resource} alt="Resource" style={{ maxWidth: '100%', maxHeight: '200px' }} />
-      ) : (
-        <a href={entry.resource} target="_blank" rel="noopener noreferrer">{entry.resource}</a>
-      )}
-      <br />
-      {isImageUrl(entry.resource) && (
-        <React.Fragment>
-          <strong>Resource Link:</strong> <a href={entry.resource} target="_blank" rel="noopener noreferrer">{entry.resource}</a><br />
-        </React.Fragment>
-      )}
-      <strong>Subject:</strong> {entry.subject}<br />
-      <strong>Tags:</strong> {entry.tags}<br />
-      <br />
-    </li>
-  ))}
-</ol>
-
-          </Col>
-        </Row>
-      </Container>
 
       <Container>
         <Row>
           <Col>
             <Container className="blurdiv">
-              <h1 className={`blur ${scrollPosition > 100 ? "scrolled" : ""}`}>
+              <h1 className={triggerBlur ===true ?`blur`: ''}>
                 <span>There</span>
                 <span>are</span>
                 <span>no</span>
@@ -153,6 +216,50 @@ function Home() {
           </Col>
         </Row>
       </Container>
+
+      <Container fluid className="kb">
+      <Row className="justify-content-center">
+        {knowledgeBase.map((entry) => (
+          <Col className='individual-kb' key={entry.id} xs={12} sm={12} md={8} lg={5} >
+            <div>
+              <strong>Description:</strong> {entry.description}<br />
+
+              {/* Show resource link */}
+              <strong>Resource:</strong> {isImageUrl(entry.resource) ? (
+                <img src={entry.resource} alt="Resource" style={{ width: '100%', maxHeight: '500px' }} />
+              ) : (
+                <a href={entry.resource} target="_blank" rel="noopener noreferrer">{entry.resource}</a>
+              )}
+              <br />
+
+              {/* Comments section */}
+              <div>
+                <strong>Comments:</strong>
+                {comments[entry.id] && comments[entry.id].map((comment, index) => (
+                  <li key={index}>{comment.comment}</li>
+                ))}
+              </div>
+
+              {/* Comment form */}
+              <form onSubmit={(e) => handleCommentSubmit(entry.id, e)}>
+                <Form.Control
+                  label="Comment"
+                  name="comment"
+                  as="textarea"
+                  rows={2}
+                  value={commentFormData.comment}
+                  onChange={(e) => setCommentFormData({ comment: e.target.value })}
+                  placeholder="Enter your comment"
+                />
+                <Button type="submit">Add Comment</Button>
+              </form>
+              <br />
+            </div>
+          </Col>
+        ))}
+      </Row>
+    </Container>
+  
 
       <Container>
         <Row>
