@@ -30,8 +30,10 @@ function Home() {
   }, []);
 
   useEffect(() => {
+
+    /**
     const fetchData = async () => {
-      const db = getFirestore(firebaseApp);
+      //const db = getFirestore(firebaseApp);
       const knowledgeBaseCollection = collection(db, 'sections');
       const snapshot = await getDocs(knowledgeBaseCollection);
 
@@ -40,9 +42,11 @@ function Home() {
     };
 
     fetchData();
+    */
   }, []);
 
   const handleFormSubmit = async (e) => {
+    /*
     e.preventDefault();
 
     const db = getFirestore(firebaseApp);
@@ -57,6 +61,7 @@ function Home() {
       subject: '',
       tags: '',
     });
+    */
   };
   function isImageUrl(url) {
     return /\.(jpeg|jpg|gif|png)$/.test(url);
