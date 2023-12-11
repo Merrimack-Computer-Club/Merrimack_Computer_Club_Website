@@ -138,16 +138,19 @@ function Home() {
 
   // Handles submitting knowledge base to the database
   const handleFormSubmit = async (e) => {
+    /*
     e.preventDefault();
 
     // Creates new knowledge base key
     const newPostKey = push(child(ref(db), 'knowledgeBases/')).key;
 
-    // Pushes data to db
-    const updates = {};
-    updates['knowledgeBases/' + newPostKey] = knowledgeBaseFormData;
-
-    return update(ref(db), updates);
+    setFormData({
+      description: '',
+      resource: '',
+      subject: '',
+      tags: '',
+    });
+    */
   };
 
   // When you change anything in the form, this gets called to update the knowledge base
