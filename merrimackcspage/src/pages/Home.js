@@ -7,6 +7,41 @@ import "../css/home.css";
 import StockVideo from "../components/StockVideo";
 
 function Home() {
+
+  // const dummyKnowledgeBase = [
+  //   {
+  //     id: 1,
+  //     description: 'Description for entry 1',
+  //     resource: 'https://via.placeholder.com/400x300.png'
+  //   },
+  //   {
+  //     id: 2,
+  //     description: 'Description for entry 2',
+  //     resource: 'https://via.placeholder.com/400x300.png'
+  //   },
+  //   {
+  //     id: 3,
+  //     description: 'Description for entry 1',
+  //     resource: 'https://via.placeholder.com/400x300.png'
+  //   },
+  //   {
+  //     id: 4,
+  //     description: 'Description for entry 2',
+  //     resource: 'https://example.com/resource2',
+  //   },
+  //   {
+  //     id: 5,
+  //     description: 'Description for entry 1',
+  //     resource: 'https://example.com/resource1',
+  //   },
+  //   {
+  //     id: 6,
+  //     description: 'Description for entry 2',
+  //     resource: 'https://example.com/resource2',
+  //   },
+  // ];
+  // setKnowledgeBase(dummyKnowledgeBase)
+
   const db = getFirestore(firebaseApp);
 
   const [triggerBlur, setTriggerBlur] = useState(false)
@@ -57,6 +92,8 @@ function Home() {
       });
       console.log("Current values in knowledge base are: ", kb);
     });
+
+   
 
     const comments = onSnapshot(collection(db, "comments"), async (querySnapshot) => {
       setCommentCollection(querySnapshot);
@@ -149,51 +186,6 @@ function Home() {
 
       </div>
 
-      <Container className="fluid">
-        <Row>
-          <Col>
-            <ol>
-              {knowledgeBase.map((entry) => (
-                <li key={entry.id}>
-                  <strong>Description:</strong> {entry.description}<br />
-
-                  {/* Show resource link */}
-                  <strong>Resource:</strong> {isImageUrl(entry.resource) ? (
-                    <img src={entry.resource} alt="Resource" style={{ width: '100%', maxHeight: '500px' }} />
-                  ) : (
-                    <a href={entry.resource} target="_blank" rel="noopener noreferrer">{entry.resource}</a>
-                  )}
-                  <br />
-
-                  {/* Comments section */}
-                  <div>
-                    <strong>Comments:</strong>
-                    {comments[entry.id] && comments[entry.id].map((comment, index) => (
-                      <li key={index}>{comment.comment}</li>
-                    ))}
-                  </div>
-
-                  {/* Comment form */}
-                  <form onSubmit={(e) => handleCommentSubmit(entry.id, e)}>
-                    <Form.Control
-                      label="Comment"
-                      name="comment"
-                      as="textarea"
-                      rows={2}
-                      value={commentFormData.comment}
-                      onChange={(e) => setCommentFormData({ comment: e.target.value })}
-                      placeholder="Enter your comment"
-                    />
-                    <Button type="submit">Add Comment</Button>
-                  </form>
-                  <br />
-                </li>
-              ))}
-            </ol>
-          </Col>
-        </Row>
-      </Container>
-
       <Container>
         <Row>
           <Col>
@@ -222,6 +214,50 @@ function Home() {
           </Col>
         </Row>
       </Container>
+
+      <Container fluid className="kb">
+      <Row className="justify-content-center">
+        {knowledgeBase.map((entry) => (
+          <Col className='individual-kb' key={entry.id} xs={12} sm={12} md={8} lg={5} >
+            <div>
+              <strong>Description:</strong> {entry.description}<br />
+
+              {/* Show resource link */}
+              <strong>Resource:</strong> {isImageUrl(entry.resource) ? (
+                <img src={entry.resource} alt="Resource" style={{ width: '100%', maxHeight: '500px' }} />
+              ) : (
+                <a href={entry.resource} target="_blank" rel="noopener noreferrer">{entry.resource}</a>
+              )}
+              <br />
+
+              {/* Comments section */}
+              <div>
+                <strong>Comments:</strong>
+                {comments[entry.id] && comments[entry.id].map((comment, index) => (
+                  <li key={index}>{comment.comment}</li>
+                ))}
+              </div>
+
+              {/* Comment form */}
+              <form onSubmit={(e) => handleCommentSubmit(entry.id, e)}>
+                <Form.Control
+                  label="Comment"
+                  name="comment"
+                  as="textarea"
+                  rows={2}
+                  value={commentFormData.comment}
+                  onChange={(e) => setCommentFormData({ comment: e.target.value })}
+                  placeholder="Enter your comment"
+                />
+                <Button type="submit">Add Comment</Button>
+              </form>
+              <br />
+            </div>
+          </Col>
+        ))}
+      </Row>
+    </Container>
+  
 
       <Container>
         <Row>
