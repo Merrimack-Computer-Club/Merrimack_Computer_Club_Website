@@ -1,7 +1,7 @@
 //import React, { useEffect, useState } from "react";
-import { Container, Button, Row, Col, Form } from "react-bootstrap"; // Updated import statements
+import { Container } from "react-bootstrap"; // Updated import statements
 import { GoogleLogin } from '@react-oauth/google';
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { jwtDecode } from 'jwt-decode' // import dependency
 import { useNavigate } from "react-router-dom";
 import '../css/login.css'
@@ -26,6 +26,11 @@ function Login() {
             <GoogleLogin
                 onSuccess={credentialResponse => {
                   const decode = jwtDecode(credentialResponse.credential);
+
+                  if(decode.email) {
+
+                  }
+
                   setEmail(decode.email);
                   navigate("/");
                 }}
