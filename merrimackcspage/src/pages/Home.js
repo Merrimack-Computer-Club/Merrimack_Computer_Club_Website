@@ -14,13 +14,14 @@ function Home() {
     subject: '',
     tags: '',
   });
+  const [commentValidated, setCommentValidated] = useState(false);
   const [knowledgeBase, setKnowledgeBase] = useState([]);
   const [comments, setComments] = useState({});
   const [commentFormData, setCommentFormData] = useState({
     comment: '',
   });
   const [selectedEntry, setSelectedEntry] = useState(null);
-
+  const [validated, setValidated] = useState(false);
   const handleEntryClick = (entryId) => {
     // Set the selected entry when clicked
     setSelectedEntry(entryId);
@@ -57,16 +58,27 @@ function Home() {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
-    const db = getFirestore(firebaseApp);
-    await addDoc(collection(db, 'sections'), formData);
+    const form = e.currentTarget;
 
-    setFormData({
-      description: '',
-      resource: '',
-      subject: '',
-      tags: '',
-    });
+    if (form.checkValidity() === false) {
+      e.stopPropagation();
+    } else {
+      const db = getFirestore(firebaseApp);
+      await addDoc(collection(db, 'sections'), formData);
+
+      setFormData({
+        description: '',
+        resource: '',
+        subject: '',
+        tags: '',
+      });
+
+      setValidated(false);
+    }
+
+    setValidated(true);
   };
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -75,23 +87,31 @@ function Home() {
     function isImageUrl(url) {
     return /\.(jpeg|jpg|gif|png)$/.test(url);
   }
-
   const handleCommentSubmit = async (entryId, e) => {
     e.preventDefault();
 
-    const db = getFirestore(firebaseApp);
-    const commentCollection = collection(db, 'comments');
+    const form = e.currentTarget;
 
-    await addDoc(commentCollection, {
-      entryId,
-      comment: commentFormData.comment,
-    });
+    if (form.checkValidity() === false) {
+      e.stopPropagation();
+    } else {
+      const db = getFirestore(firebaseApp);
+      const commentCollection = collection(db, 'comments');
 
-    setCommentFormData({
-      comment: '',
-    });
+      await addDoc(commentCollection, {
+        entryId,
+        comment: commentFormData.comment,
+      });
+
+      setCommentFormData({
+        comment: '',
+      });
+
+      setCommentValidated(false);
+    }
+
+    setCommentValidated(true);
   };
-
   const loadComments = async (entryId) => {
     try {
       const db = getFirestore(firebaseApp);
@@ -212,12 +232,11 @@ function Home() {
           </Col>
         </Row>
       </Container>
-
       <Container>
         <Row>
           <Col>
             <Container className="blurdiv">
-              <form onSubmit={handleFormSubmit}>
+              <Form noValidate validated={validated} onSubmit={handleFormSubmit}>
                 <Form.Control
                   label="Description"
                   name="description"
@@ -226,6 +245,7 @@ function Home() {
                   value={formData.description}
                   onChange={handleInputChange}
                   placeholder="Enter Description"
+                  required  // HTML5 required attribute
                 />
                 <Form.Control
                   label="Resource Link"
@@ -234,6 +254,7 @@ function Home() {
                   value={formData.resource}
                   onChange={handleInputChange}
                   placeholder="Enter Resource Link"
+                  required  // HTML5 required attribute
                 />
                 <Form.Control
                   label="Subject"
@@ -242,6 +263,7 @@ function Home() {
                   value={formData.subject}
                   onChange={handleInputChange}
                   placeholder="Enter Subject"
+                  required  // HTML5 required attribute
                 />
                 <Form.Control
                   label="Tags"
@@ -250,9 +272,10 @@ function Home() {
                   value={formData.tags}
                   onChange={handleInputChange}
                   placeholder="Enter Tags"
+                  required  // HTML5 required attribute
                 />
                 <Button type="submit">Add to Knowledgebase</Button>
-              </form>
+              </Form>
             </Container>
           </Col>
         </Row>
