@@ -10,11 +10,12 @@ function Navbar() {
 
     <div className='NavBarClass'>
     <ul>
-        <li ><a className="active" href="/"><span>Home</span></a></li>
-        <li ><a href="/blog"><span>Blog</span></a></li>
-        <Link to="/login">
-          <Button style={{borderRadius: '20px'}}><h1>Log in </h1></Button>
-        </Link>
+      <li ><a className="active" href="/"><span>Home</span></a></li>
+      <li ><a href="/blog"><span>Blog</span></a></li>
+      <li ><a href="/user"><span>User Profile</span></a></li>
+      <Link to="/login">
+        <Button style={{borderRadius: '20px'}}><h1>Log in </h1></Button>
+      </Link>
     </ul>
     </div>
 
