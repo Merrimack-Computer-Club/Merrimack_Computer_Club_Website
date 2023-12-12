@@ -1,9 +1,8 @@
-import React, { useEffect, useState, render } from "react";
+import React, { useEffect, useState } from "react";
 import '../css/knowledgebase.css';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import Markdown from 'react-markdown';
-import { Button, Text } from '@mantine/core';
+import { Text, Button, TagsInput, Collapse, Flex } from '@mantine/core';
 import { app, database } from '../pages/firebaseConfig';
 import { getDatabase, ref, onValue, push, child, update, set, remove } from "firebase/database";
 
@@ -25,10 +24,22 @@ function Post({key, userID, userEmail, createTime, updateTime, information, titl
 
     const [value, setValue] = useState(information);
     const [editing, setEditing] = useState(false);
+    const [resourcesOpened, setResources] = useState(false);
+    const [resourceText, setResourceText] = useState("");
 
     useEffect(() => {
-       
-    }, []);
+       // Determine if we have resources
+       var worked = resources !== null && resources !== undefined;
+       var temp = "";
+       // If worked, set variable resourcesText
+       if(worked) {
+           for(var key in resources) {
+               temp += resources[key];
+               temp += "\n"
+           }
+           setResourceText(temp);
+       }
+    }, [resourceText]);
 
     // Called when the save button is clicked, this then updates realtime-database
     function saveClicked() {
@@ -66,6 +77,11 @@ function Post({key, userID, userEmail, createTime, updateTime, information, titl
             return true;
         }
         return false;
+    }
+
+    function hasResources() {
+        // Determine if we have resources
+        return resources !== null && resources !== undefined;
     }
 
     function editClicked() {
@@ -112,15 +128,42 @@ function Post({key, userID, userEmail, createTime, updateTime, information, titl
 
         {/* Represents the displaying of a post */}
         {!isEditing() &&
-            <ReactQuill value={value} readOnly={true} theme={"bubble"}/>      
-        }
+            <div className="content">
+                {/* Information */}
+                <ReactQuill value={value} readOnly={true} theme={"bubble"}/>    
+                {/*Tags*/}
+                <TagsInput label="Tags" placeholder="" readOnly defaultValue={() => {
+                    if(tags == undefined || tags == null) 
+                        return [];
 
-        {/* If not currently editing, but able to edit. Add the Edit button */}
-        {!isEditing() && canEdit() &&
-            <div>
-                <Button style={{alignContent: "center", margin: "5px 5px 5px 5px"}} onClick={editClicked} variant="gradient" gradient={{ from: 'blue', to: 'cyan', deg: 0 }} size="sm">Edit</Button>
+                    var ret = [];
+                    for(var key in tags) {
+                        ret.push(tags[key]);
+                    }
+                    return ret;
+                }}/>  
+                {/*Resources*/}
+                {hasResources() &&
+                <div className='resources'>
+                    <Button onClick={() => {setResources(!resourcesOpened)}}>Resources</Button>
+                    <Collapse in={resourcesOpened} transitionDuration={500} transitionTimingFunction="linear">
+                        <Text style={{margin: "10px 10px 10px 10px"}}>{resourceText}</Text>
+                    </Collapse>
+                </div>   
+                }
+
+            {/* If not currently editing, but able to edit. Add the Edit button */}
+            {canEdit() &&
+                <div style={{display: "flex", justifyContent: "center", alignContent: "center", margin: "5px 5px 5px 5px"}} >
+                    <Button onClick={editClicked} variant="gradient" gradient={{ from: 'blue', to: 'cyan', deg: 0 }} size="sm">Edit</Button>
+                </div>
+            }
             </div>
         }
+
+        
+
+
         </div>
     </div>
 

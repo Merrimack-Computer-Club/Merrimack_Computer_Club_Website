@@ -30,7 +30,7 @@
     flex-direction: column;
     border-radius: 10px;
     padding: 10px 10px 10px 10px;
-    border: 1px black solid;
+    min-width:max-content;
 }
 
 .knowledgebase {
@@ -60,4 +60,16 @@
     background-color: var(--bg-color);
     border-radius: 10px;
     padding: 10px 10px 10px 10px;
+}
+
+.ql-editor {
+    min-height: 300px;
+}
+
+.resources {
+    margin: 10px 10px 30px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }

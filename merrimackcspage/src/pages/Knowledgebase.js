@@ -2,8 +2,8 @@ import { React, useEffect, useState } from 'react'
 import CreatePostForm from "../components/CreatePostForm";
 import Post from "../components/Post"
 import { Autocomplete } from '@mantine/core';
-import { app, database } from './firebaseConfig';
-import { getDatabase, ref, onValue, push, child, update, set} from "firebase/database";
+import { database } from './firebaseConfig';
+import { ref, onValue } from "firebase/database";
 
 function Knowledgebase(props) {
 
@@ -34,7 +34,7 @@ function Knowledgebase(props) {
    * @param {*} value 
    */
   function onSearchSubmit(value) {
-     setDisplayedPosts(posts.filter(n=> n.title != null && n.title != undefined && n.title == value));
+     setDisplayedPosts(posts.filter(n=> n.title !== null && n.title !== undefined && n.title === value));
   }
 
   return (
@@ -43,7 +43,7 @@ function Knowledgebase(props) {
 
       {/* Autocomplete tab for searching data */}
       <div className='search'>
-        <Autocomplete label="Search" onOptionSubmit={onSearchSubmit} data={posts.map(n => (n.title == null || n.title == undefined) ? null : n.title)} value={search} onChange={setSearch} comboboxProps={{ shadow: 'md', transitionProps: { transition: 'pop', duration: 200 } }}/>
+        <Autocomplete label="Search" onOptionSubmit={onSearchSubmit} data={posts.map(n => (n.title === null || n.title === undefined) ? null : n.title)} value={search} onChange={setSearch} comboboxProps={{ shadow: 'md', transitionProps: { transition: 'pop', duration: 200 } }}/>
       </div>
 
       <div className='posts' style={{ paddingTop: '60px', height: 'fit-content' }}>
