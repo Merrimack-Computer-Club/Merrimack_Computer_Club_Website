@@ -4,6 +4,8 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import Markdown from 'react-markdown';
 import { Button, Text } from '@mantine/core';
+import { app, database } from '../pages/firebaseConfig';
+import { getDatabase, ref, onValue, push, child, update, set, remove } from "firebase/database";
 
 /**
  * @param {*} postID Represents the UUID for this post
@@ -30,12 +32,24 @@ function Post({key, userID, userEmail, createTime, updateTime, information, titl
 
     // Called when the save button is clicked, this then updates realtime-database
     function saveClicked() {
+
+        // Update the reference in the database
+        update(ref(database, `knowledgebase/${title}`), {information: value});
+
         setEditing(false);
     }
 
     // Called when the delete button is pressed on a post
     function deleteClicked() {
 
+        remove(ref(database, `knowledgebase/${title}`)).then(() => {
+            setEditing(false);
+            refreshPage();
+        });
+    }
+
+    function refreshPage() {
+        window.location.reload(false);
     }
 
     // Function returns if the user is editing the post (react-quill rendered)
@@ -92,6 +106,7 @@ function Post({key, userID, userEmail, createTime, updateTime, information, titl
             <div className="editing">
                 <ReactQuill matchVisual={false} theme="snow" value={value} onChange={setValue} modules={{clipboard: {matchVisual: false}, toolbar: toolbarOptions}}/> 
                 <Button style={{margin: "5px 5px 5px 5px"}} onClick={saveClicked} variant="gradient" gradient={{ from: 'blue', to: 'cyan', deg: 0 }} size="sm">Save</Button>
+                <Button style={{alignContent: "center", margin: "5px 5px 5px 20px"}} onClick={deleteClicked} variant="gradient" gradient={{ from: 'red', to: 'gray', deg: 0 }} size="sm">Delete</Button>
             </div>
         }
 
@@ -104,7 +119,6 @@ function Post({key, userID, userEmail, createTime, updateTime, information, titl
         {!isEditing() && canEdit() &&
             <div>
                 <Button style={{alignContent: "center", margin: "5px 5px 5px 5px"}} onClick={editClicked} variant="gradient" gradient={{ from: 'blue', to: 'cyan', deg: 0 }} size="sm">Edit</Button>
-                <Button style={{alignContent: "center", margin: "5px 5px 5px 5px"}} onClick={deleteClicked} variant="gradient" gradient={{ from: 'red', to: 'gray', deg: 0 }} size="sm">Delete</Button>
             </div>
         }
         </div>
