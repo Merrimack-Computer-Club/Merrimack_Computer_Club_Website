@@ -98,6 +98,7 @@ function CreatePostForm() {
                     await set(ref(db, path), values);  // Update the database
                     form.setInitialValues(form.initialValues);  // Set the form back to initial values
                     setMessage("Post has been submitted");
+                    refreshPage();
                 }
             });
     
@@ -106,6 +107,10 @@ function CreatePostForm() {
             form.setFieldError("title", "Error with submitting form, from database.")
           }
         
+    }
+
+    function refreshPage() {
+        window.location.reload(false);
     }
 
   return (

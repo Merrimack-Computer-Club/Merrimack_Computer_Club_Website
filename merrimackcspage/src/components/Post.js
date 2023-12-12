@@ -19,9 +19,9 @@ import { Button, Text } from '@mantine/core';
  * 
  * @returns 
  */
-function Post({postID, userID, userEmail, createTime, updateTime, initValue, title, tags, resources, comments }) {
+function Post({key, userID, userEmail, createTime, updateTime, information, title, tags, resources, comments }) {
 
-    const [value, setValue] = useState(initValue);
+    const [value, setValue] = useState(information);
     const [editing, setEditing] = useState(false);
 
     useEffect(() => {
@@ -45,7 +45,7 @@ function Post({postID, userID, userEmail, createTime, updateTime, initValue, tit
 
     // Function determines if the user can edit the post
     function canEdit() {
-        console.log(value);
+        //console.log(value);
         if(localStorage.getItem("email") != undefined && 
         localStorage.getItem("email") != null && 
         userEmail == localStorage.getItem("email")) {
@@ -78,15 +78,9 @@ function Post({postID, userID, userEmail, createTime, updateTime, initValue, tit
         ['clean']                                         // remove formatting button
       ];
 
-    function htmlDecode(input){
-        var e = document.createElement('div');
-        e.innerHTML = input;
-        return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
-    }
-
   return (
 
-    <div className="post" id={postID}>
+    <div className="post" id={key}>
         
         <div className="title">
             <Text size="xl" style={{borderBottom: "2px black solid"}}>{title}</Text>
