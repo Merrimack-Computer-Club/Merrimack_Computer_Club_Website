@@ -7,7 +7,7 @@ import './css/variables.css'
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import Navbar from "./components/Navbar";
 import Home from './pages/Home'
-import Blog from './pages/Blog'
+import Knowledgebase from './pages/Knowledgebase'
 import Login from './pages/Login'
 import User from './pages/User'
 
@@ -28,7 +28,7 @@ function App() {
           <Navbar />
           <Routes>
             <Route exact path="/" element={<Home />} />
-            <Route path="/blog" element={<Blog />} />
+            <Route path="/Knowledgebase" element={<Knowledgebase />} />
             <Route path="/login" element={<Login />} />
             <Route path="/user" element={<User />} />
           </Routes>
