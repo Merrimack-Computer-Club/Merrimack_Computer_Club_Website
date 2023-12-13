@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { set, ref } from 'firebase/database';  
 import '../css/login.css';
 
-function Login() {
+function Login({ setLoggedIn }) {
   const [email, setEmail] = useState(null);
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -30,6 +30,9 @@ function Login() {
       // Construct the path
       const path = `users/${firebaseKey}`;
       console.log("Firebase Path:", path);
+
+      // Update the localStorage to contain the usersid
+      localStorage.setItem("userid", firebaseKey);
 
       // Use the set function on the reference to add data to the path
       await set(ref(db, path), {
@@ -67,6 +70,9 @@ function Login() {
 
     // Trigger the addUserToFirebase function
     addUserToFirebase(decode.email, firstName, lastName);
+
+    // Update the login status in the App component
+    setLoggedIn(true);
 
     navigate("/");
   };
