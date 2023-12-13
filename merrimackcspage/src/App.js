@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MantineProvider } from "@mantine/core";
 import '@mantine/core/styles.css';
-import './css/variables.css';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import Navbar from "./components/Navbar";
 
@@ -9,7 +8,6 @@ import Home from './pages/Home'
 import Knowledgebase from './pages/Knowledgebase'
 import Login from './pages/Login'
 import User from './pages/User'
-
 
 import {
   BrowserRouter as Router,
@@ -20,8 +18,28 @@ import {
 function App() {
   const [isLoggedIn, setLoggedIn] = useState(false);
 
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      try {
+        // Assuming you have a function to get the user's email from the database
+        const userEmail = await getUserEmailFromDatabase();
+
+        // Set isLoggedIn based on whether the user has an email
+        setLoggedIn(!!userEmail);
+      } catch (error) {
+        console.error('Error checking login status:', error);
+      }
+    };
+
+    checkLoginStatus();
+  }, []); // Run this effect only once on component mount
+
   const handleLogout = () => {
-    // Implement your logout logic here
+    // Clear the user's email from localStorage
+    localStorage.removeItem('email');
+  
+  
+    // Update the isLoggedIn state
     setLoggedIn(false);
   };
 
@@ -32,14 +50,11 @@ function App() {
           <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
           <Routes>
             <Route exact path="/" element={<Home />} />
-
             <Route path="/Knowledgebase" element={<Knowledgebase />} />
-        
             <Route
               path="/login"
               element={<Login setLoggedIn={setLoggedIn} />}
             />
-
             <Route path="/user" element={<User />} />
           </Routes>
         </Router>
@@ -49,3 +64,10 @@ function App() {
 }
 
 export default App;
+
+// Replace this with your actual function to get user email from the database
+const getUserEmailFromDatabase = async () => {
+    const userEmail = localStorage.getItem('email');
+    return userEmail ? userEmail : null;
+  };
+
