@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useReducer } from "react";
 import '../css/knowledgebase.css';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -29,6 +29,8 @@ function Post({key, userID, userEmail, createTime, updateTime, information, titl
     const [resourceText, setResourceText] = useState("");
     const [comment, setComment] = useState('');;
     const [comments, setComments] = useState(in_comments);
+    const [, forceUpdate] = useReducer(x => x + 1, 0);
+
 
     useEffect(() => {
 
@@ -141,15 +143,16 @@ function Post({key, userID, userEmail, createTime, updateTime, information, titl
         remove(ref(database, `knowledgebase/${title}/in_comments/${idx}`)).then(() => {
             console.log(`Comment ${idx} removed`);
 
-        
             // Remove the item from the parents comments state.
             setComments(current => {
                 delete current[idx];
-                console.log(current);
                 return current;
             });
 
-            console.log(comments);
+            // Force a render of this Post
+            forceUpdate();
+
+
         });
         
     }
