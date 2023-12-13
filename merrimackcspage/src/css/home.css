@@ -1,3 +1,7 @@
+.content-container{
+  height: 55rem;
+}
+
 .content {
   margin-top: 10rem;
   padding-bottom: 5rem;
@@ -12,7 +16,7 @@
 }
 
 .titlecontainer {
-  margin-top: 100px;
+  margin-top: 10px;
   width: 60%;
   float: left;
   background-color: white;
@@ -23,78 +27,7 @@
   font-family: var(--poppinsBold);
 }
 
-
-.kb {
-  width: 99%;
-  margin: auto;
-  height: fit-content;
-  flex: 1;
-  padding: 20px 20px;
-  list-style-type: none;
-  position: relative;
-}
-
-.kb .individual-kb {
-  margin-bottom: 20px; /* Add margin-bottom to create space between columns */
-  margin-right: 20px;
-  border: 1px solid black;
-  padding: 20px;
-  background-color: lightgrey;
-  border-radius: 20px;
-}
-
-@media screen and (max-width: 1400px) {
-  .title {
-      font-size: 5rem;
-  }
-}
-
-@media screen and (max-width: 1300px) {
-  .title {
-      font-size: 4rem;
-  }
-}
-
-@media screen and (max-width: 800px) {
-  .titlecontainer {
-      width: 100%;
-      text-align: center;
-  }
-  .title {
-      font-size: var(--largeFont);
-  }
-  .kb .individual-kb{
-    margin-right: 0px;
-  }
-}
-
-
-
-
-
-
-
-
-.blurdiv {
-  width: 100%;
-  background-color: lightgrey;
-  border-radius: 50px;
-  margin-top: 50px;
-  padding-bottom: 50px;
-  padding: 50px;
-  text-align: center;
-}
-
-.blurdiv .blur h1 {
-  font-family: "Montserrat Medium";
-  width: 100%;
-  text-align: center;
-  transform: scale(0.94);
-  animation: scale 3s forwards cubic-bezier(0.5, 1, 0.89, 1);
-}
-
-
-
+/* Reference: https://codepen.io/alvarotrigo/pen/PoKMyNO */
 .animate-charcter {
   background-image: linear-gradient(
       -225deg,
@@ -127,8 +60,34 @@
   }
 }
 
-.blur span {
-  margin-right: 5px;
+.blurdiv {
+  width: 100%;
+  background-color: lightgrey;
+  border-radius: 50px;
+
+  padding: 50px;
+
+  margin-bottom: 50px;
+  margin-top: 50px;
+  text-align: center;
+}
+
+.blurdiv .blur h1 {
+  font-family: "Montserrat Medium";
+  width: 100%;
+  text-align: center;
+  transform: scale(0.94);
+  animation: scale 3s forwards cubic-bezier(0.5, 1, 0.89, 1);
+}
+
+
+/* Reference: https://codepen.io/alvarotrigo/pen/ExvqdNa */
+.blur-text {
+  font-size: 4rem;
+}
+
+.blur-text span {
+  margin-right: 10px;
   display: inline-block;
   opacity: 0;
   filter: blur(4px);
@@ -215,5 +174,51 @@
   100% {
       opacity: 1;
       filter: blur(0);
+  }
+}
+
+
+@media screen and (max-width: 1300px) {
+  .title {
+      font-size: 5rem;
+  }
+  .blur-text {
+    font-size: 3rem;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .titlecontainer {
+      width: 100%;
+      text-align: center;
+  }
+  .title {
+      font-size: 4rem;
+  }
+  .blur-text {
+    font-size: 2rem;
+  }
+  .content-container{
+    height: 55rem;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .titlecontainer {
+      width: 100%;
+      text-align: center;
+  }
+ 
+  .title {
+      font-size: 3rem;
+  } 
+  .blur-text {
+    font-size: 1rem;
+  }
+}
+
+@media screen and (max-width: 380px) {
+  .content-container{
+    height: 45rem;
   }
 }

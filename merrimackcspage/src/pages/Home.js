@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { Container, Button, Row, Col, Form} from "react-bootstrap";
-import { Card, Image, Text, Badge, Group, Divider} from '@mantine/core';
+import { Container, Button, Row, Col, Form } from "react-bootstrap";
 import { app as firebaseApp } from './firebaseConfig';
-import { getDatabase, ref, onValue, push, child, update } from "firebase/database";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/home.css";
 import StockVideo from "../components/StockVideo";
 
 function Home() {
+  // Database vars
+  const db = getDatabase();
+  const knowledgeBaseRef = ref(db, 'knowledgeBases/')
 
-  const [triggerBlur, setTriggerBlur] = useState(false);
+  const [triggerBlur, setTriggerBlur] = useState(false)
+
+
 
   // Runs on initial render, sets listeners to database
   useEffect(() => {
+
 
     //Listens to window scroll events and triggers a blur effect on a div
     // after the user has scrolled past a certain position.
@@ -27,17 +31,20 @@ function Home() {
     };
     window.addEventListener('scroll', handleScroll);
 
+
   }, []);
 
-  const image_1_path = './images/cs-image-2.png'
-  const image_2_path = './images/cs-image-3.png'
+
+  function isImageUrl(url) {
+    return /\.(jpeg|jpg|gif|png)$/.test(url);
+  }
 
   return (
     <div>
-      <div
+      <div className="content-container"
         style={{
           backgroundColor: "transparent",
-          height: "55rem",
+       
         }}
       >
         <Container fluid>
@@ -60,7 +67,7 @@ function Home() {
         <Row>
           <Col>
             <Container className="blurdiv">
-              <h1 className={triggerBlur === true ? `blur` : ''}>
+              <h1 className={triggerBlur === true ? `blur-text blur` : 'blur-text'}>
                 <span>There</span>
                 <span>are</span>
                 <span>no</span>
@@ -148,6 +155,7 @@ function Home() {
 
       </div>
 
+ 
     </div>
   );
 }
