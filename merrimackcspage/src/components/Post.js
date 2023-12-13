@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import '../css/knowledgebase.css';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { Text, Button, TagsInput, Collapse, Flex } from '@mantine/core';
+import { Text, Button, TagsInput, Collapse, TextInput } from '@mantine/core';
 import { app, database } from '../pages/firebaseConfig';
-import { getDatabase, ref, onValue, push, child, update, set, remove } from "firebase/database";
+import { getDatabase, ref, onValue, push, child, update, get, set, remove } from "firebase/database";
 import Comment from "./Comment";
 
 /**
@@ -21,12 +21,14 @@ import Comment from "./Comment";
  * 
  * @returns 
  */
-function Post({key, userID, userEmail, createTime, updateTime, information, title, tags, resources, comments }) {
+function Post({key, userID, userEmail, createTime, updateTime, information, title, tags, resources, in_comments }) {
 
     const [value, setValue] = useState(information);
     const [editing, setEditing] = useState(false);
     const [resourcesOpened, setResources] = useState(false);
     const [resourceText, setResourceText] = useState("");
+    const [comment, setComment] = useState('');;
+    const [comments, setComments] = useState(in_comments);
 
     useEffect(() => {
        // Determine if we have resources
@@ -68,6 +70,74 @@ function Post({key, userID, userEmail, createTime, updateTime, information, titl
     function isEditing() {
         return editing;
     }
+
+    function getEmail() {
+        return localStorage.getItem("email");
+    }
+
+    function getUserID() {
+        return localStorage.getItem("userid");
+    }
+
+    function hasEmail() {
+        return getEmail() != null && getEmail() != undefined;
+    }
+
+    function hasUserID() {
+        return getUserID() != null && getUserID() != undefined;
+    }
+
+    /**
+     * Called when this comment is submitted, update this ref in firebase
+     */
+    function submitComment() {
+        // Assure a comment exists.
+        if(comment === null || comment === undefined || comment.trim().length == 0) {
+            return;
+        }
+
+        try {
+            const db = database;
+            
+            // Get the comments array
+            var temp = (comments !== undefined && comments !== null) ? comments : {};
+            
+            // Construct the comment
+            const commentTemp = {
+                commenter: getUserID(),
+                commenter_email: getEmail(),
+                comment: comment,
+                creationTime: Date.now()
+            }
+
+            // Find the last key, to append this comment to the object in firebase
+            var lastKey = 0;
+            for(var k in temp) {
+                if(k > lastKey) 
+                    lastKey = Number(k);
+            }
+
+            temp[lastKey == 0 ? 0 : lastKey + 1] = commentTemp;
+
+            // Construct the path
+            get(ref(db, `knowledgebase/${title}/comments`)).then(snapshot => {
+                if(snapshot.exists()) {
+                    console.log(comments);
+                    update(ref(database, `knowledgebase/${title}`), {comments: temp});
+                } else {
+                    console.log(comments);
+                    set(ref(database, `knowledgebase/${title}`), {comments: temp});
+                }
+            });
+            
+            setComments(temp);
+            setComment('');
+
+        } catch(error) {
+            console.log(error);
+        }
+    }
+
 
     // Function determines if the user can edit the post
     function canEdit() {
@@ -160,11 +230,18 @@ function Post({key, userID, userEmail, createTime, updateTime, information, titl
                 </div>
             }
 
-                <Comment key="key" comment="This is an example comment." commenter_email={userEmail} createTime={1000} ></Comment>
+            {/* Display comments if logged in*/}
+            {hasEmail() && hasUserID() &&
+                <div className="comments">
+                    <div className="commentsInput">
+                        <TextInput label="Create comment" value={comment} onChange={(event) => setComment(event.currentTarget.value)} style={{marginRight: "10px", minWidth: "75%"}}/>
+                        <Button onClick={submitComment} variant="gradient" gradient={{ from: 'blue', to: 'green', deg: 0 }} size="sm" style={{marginRight: "10px"}}>Submit</Button>
+                    </div>
+                    <Comment key="key" comment="This is an example comment." commenter_email={userEmail} createTime={1000} ></Comment>
+                </div>
+            }
             </div>
         }
-
-        
 
 
         </div>

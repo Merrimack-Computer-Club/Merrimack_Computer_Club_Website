@@ -52,7 +52,7 @@ function Knowledgebase(props) {
       {/* Display a list of posts from displayedPosts */}
       <div className='posts' style={{ paddingTop: '60px', height: 'fit-content' }}>
         {displayedPosts.map((n) => {     
-           return (<Post key={n.title} userID={n.maintainer} userEmail={n.maintainer_email} createTime={n.creationTime} updateTime={n.updateTime} information={n.information} title={n.title} tags={n.tags} resources={n.resources} comments={n.comments} />  
+           return (<Post key={n.title} userID={n.maintainer} userEmail={n.maintainer_email} createTime={n.creationTime} updateTime={n.updateTime} information={n.information} title={n.title} tags={n.tags} resources={n.resources} in_comments={n.comments} />  
            ) 
         })}
       </div>

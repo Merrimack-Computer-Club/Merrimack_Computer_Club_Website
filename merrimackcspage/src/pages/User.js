@@ -68,7 +68,7 @@ function PostsList({ currentUser, firstName }) {
               title={post.title}
               tags={post.tags}
               resources={post.resources}
-              comments={post.comments}
+              in_comments={post.comments}
             />
           </ColoredBox>
         ))

@@ -79,5 +79,17 @@
 }
 
 .comment {
-    
+
+}
+
+.comments {
+    display: flex;
+    flex-direction: column;
+}
+
+.commentsInput {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    padding: 10px 10px 10px 10px;
 }
