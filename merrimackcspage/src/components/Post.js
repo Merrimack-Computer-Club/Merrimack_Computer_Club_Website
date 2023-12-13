@@ -5,6 +5,7 @@ import 'react-quill/dist/quill.snow.css';
 import { Text, Button, TagsInput, Collapse, Flex } from '@mantine/core';
 import { app, database } from '../pages/firebaseConfig';
 import { getDatabase, ref, onValue, push, child, update, set, remove } from "firebase/database";
+import Comment from "./Comment";
 
 /**
  * @param {*} postID Represents the UUID for this post
@@ -158,6 +159,8 @@ function Post({key, userID, userEmail, createTime, updateTime, information, titl
                     <Button onClick={editClicked} variant="gradient" gradient={{ from: 'blue', to: 'cyan', deg: 0 }} size="sm">Edit</Button>
                 </div>
             }
+
+                <Comment key="key" comment="This is an example comment." commenter_email={userEmail} createTime={1000} ></Comment>
             </div>
         }
 
