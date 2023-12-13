@@ -1,82 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Container, Button, Row, Col, Form } from "react-bootstrap";
+import { Container, Button, Row, Col, Form} from "react-bootstrap";
+import { Card, Image, Text, Badge, Group, Divider} from '@mantine/core';
 import { app as firebaseApp } from './firebaseConfig';
 import { getDatabase, ref, onValue, push, child, update } from "firebase/database";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/home.css";
 import StockVideo from "../components/StockVideo";
 
-
-// This dummy data is what im currently setting the knowledge base info too. 
-//Will have to be changed to actually knowledge base. Also it is an array which is why we can map,
-//the snapshot.val() is not an array
-const dummyKnowledgeBase = [
-  {
-    id: 1,
-    description: 'Description for entry 1',
-    resource: 'https://via.placeholder.com/400x300.png'
-  },
-  {
-    id: 2,
-    description: 'Description for entry 2',
-    resource: 'https://via.placeholder.com/400x300.png'
-  },
-  {
-    id: 3,
-    description: 'Description for entry 1',
-    resource: 'https://via.placeholder.com/400x300.png'
-  },
-  {
-    id: 4,
-    description: 'Description for entry 2',
-    resource: 'https://example.com/resource2',
-  },
-  {
-    id: 5,
-    description: 'Description for entry 1',
-    resource: 'https://example.com/resource1',
-  },
-  {
-    id: 6,
-    description: 'Description for entry 2',
-    resource: 'https://example.com/resource2',
-  },
-];
-
 function Home() {
-  // Database vars
-  const db = getDatabase();
-  const knowledgeBaseRef = ref(db, 'knowledgeBases/')
 
-  const [triggerBlur, setTriggerBlur] = useState(false)
-
-  // Use states for knowledge base 
-  const [knowledgeBase, setKnowledgeBase] = useState([]);
-  const [commentCollection, setCommentCollection] = useState([])
-  const [comments, setComments] = useState({});
-
-
-  // Form data use States
-  const [commentFormData, setCommentFormData] = useState({
-    comment: '',
-  });
-  const [knowledgeBaseFormData, setKnowledgeBaseFormData] = useState({
-    description: '',
-    resource: '',
-    subject: '',
-    tags: '',
-  });
-
-  // Not sure what this function is for
-  const handleEntryClick = (entryId) => {
-    // Load comments for the selected entry
-    loadComments(entryId);
-  };
+  const [triggerBlur, setTriggerBlur] = useState(false);
 
   // Runs on initial render, sets listeners to database
   useEffect(() => {
-
-    setKnowledgeBase(dummyKnowledgeBase)
 
     //Listens to window scroll events and triggers a blur effect on a div
     // after the user has scrolled past a certain position.
@@ -91,78 +27,10 @@ function Home() {
     };
     window.addEventListener('scroll', handleScroll);
 
-    // Listens to database to get knowledge bases. Currently does nothing with them. Should also get comments here
-    onValue(knowledgeBaseRef, (snapshot) => {
-      console.log(snapshot.val(), 'knowledge base data here')
-    });
-
   }, []);
 
-  // Runs whenever the knowledge base or comments change in the db. 
-  useEffect(() => {
-    // knowledgeBase.forEach(entry => loadComments(entry.id));
-  }, [knowledgeBase, commentCollection]);
-
-  // Function that formerly loaded in comments to specific knowledge bases
-  // TODO, actually have it so that comments are loaded from database to 
-  const loadComments = async (entryId) => {
-    // try {
-    //     const commentCollection = collection(db, 'comments');
-    //     const q = query(commentCollection, where('entryId', '==', entryId));
-    //     const querySnapshot = await getDocs(q);
-
-    //     const entryComments = querySnapshot.docs.map(doc => doc.data());
-    //     setComments(prevComments => ({ ...prevComments, [entryId]: entryComments }));
-    //   } catch (error) {
-    //     console.error('Error loading comments:', error);
-    //   }
-  };
-
-  // This function handles submitting a comment on a knowledge base but it doesnt currently do anything
-  const handleCommentSubmit = async (entryId, e) => {
-    // e.preventDefault();
-
-    // const db = getFirestore(firebaseApp);
-    // const commentCollection = collection(db, 'comments');
-
-    // await addDoc(commentCollection, {
-    //   entryId,
-    //   comment: commentFormData.comment,
-    // });
-
-    // setCommentFormData({
-    //   comment: '',
-    // });
-  };
-
-
-  // Handles submitting knowledge base to the database
-  const handleFormSubmit = async (e) => {
-  
-    e.preventDefault();
-
-    // Creates new knowledge base key
-    const newPostKey = push(child(ref(db), 'knowledgeBases/')).key;
-
-    // Pushes data to db
-    const updates = {};
-    updates['knowledgeBases/' + newPostKey] = knowledgeBaseFormData;
-
-    return update(ref(db), updates);
-  };
-
-  // When you change anything in the form, this gets called to update the knowledge base
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setKnowledgeBaseFormData((prevData) => ({ ...prevData, [name]: value }));
-  };
-
-  function isImageUrl(url) {
-    return /\.(jpeg|jpg|gif|png)$/.test(url);
-  }
-
-
-
+  const image_1_path = './images/cs-image-2.png'
+  const image_2_path = './images/cs-image-3.png'
 
   return (
     <div>
@@ -218,50 +86,68 @@ function Home() {
       </Container>
 
       
-      <Container>
-        <Row>
-          <Col>
-            <Container className="blurdiv">
-              <form onSubmit={handleFormSubmit}>
-                <Form.Control
-                  label="Description"
-                  name="description"
-                  as="textarea"
-                  rows={3}
-                  value={knowledgeBaseFormData.description}
-                  onChange={handleInputChange}
-                  placeholder="Enter Description"
-                />
-                <Form.Control
-                  label="Resource Link" 
-                  name="resource"
-                  type="text"
-                  value={knowledgeBaseFormData.resource}
-                  onChange={handleInputChange}
-                  placeholder="Enter Resource Link"
-                />
-                <Form.Control
-                  label="Subject"
-                  name="subject"
-                  type="text"
-                  value={knowledgeBaseFormData.subject}
-                  onChange={handleInputChange}
-                  placeholder="Enter Subject"
-                />
-                <Form.Control
-                  label="Tags"
-                  name="tags"
-                  type="text"
-                  value={knowledgeBaseFormData.tags}
-                  onChange={handleInputChange}
-                  placeholder="Enter Tags"
-                />
-                <Button type="submit">Add to Knowledgebase</Button>
-              </form>
-            </Container>
-          </Col>
-        </Row>
-      </Container>
+      {/* Information and posts will go below here */}
+      <div className="content">
+
+        {/* About us: */}
+        <Container className="content-container">
+          <Card shadow="sm" padding="lg" radius="md" withBorder>
+            <Card.Section>
+              <Image
+                src={image_1_path}
+                height={500}
+                alt="Computer Science Students One"
+              />
+            </Card.Section>
+
+            <Group justify="space-between" mt="md" mb="xs">
+              <Text fw={500}>About Us</Text>
+              <Badge color="pink">info</Badge>
+            </Group>
+
+            <Text mt="sm" size="sm" c="dimmed" span inherit>
+             At the Merrimack College Computer Club, we're more than just a community of tech enthusiasts – we're a dynamic hub for creativity,
+             collaboration, and innovation. Founded on the principles of curiosity and inclusivity, 
+             our club brings together students from diverse backgrounds who share a 
+             common passion for computer science, programming, and all things tech.
+            </Text>
+          </Card>
+        </Container>
+
+        {/* Mission Statement: */}
+        <Container className="content-container">
+          <Card shadow="sm" padding="lg" radius="md" withBorder>
+            <Card.Section>
+              <Image
+                src={image_2_path}
+                height={500}
+                alt="Computer Science Students Two"
+              />
+            </Card.Section>
+
+            <Group justify="space-between" mt="md" mb="xs">
+              <Text fw={500}>Mission Statement</Text>
+              <Badge color="pink">info</Badge>
+            </Group>
+
+            <Text mt="sm" size="sm" c="dimmed" span inherit>
+              Our mission is to foster a welcoming space where students can:
+
+              Learn: Engage in hands-on learning experiences through workshops, projects, and collaborative coding sessions.
+              Innovate: Explore and push the boundaries of technology, encouraging creative problem-solving and out-of-the-box thinking.
+              Connect: Build lasting connections with like-minded peers, industry professionals, and mentors within the expansive tech community.
+              Contribute: Contribute to open-source projects, showcase individual talents, and make a positive impact on campus and beyond.
+              Inclusive Community: We believe that diversity fuels innovation. Our club welcomes students of all skill levels, backgrounds, and majors. Whether you're a seasoned developer or just starting your coding journey, there's a place for you here.
+
+              Hands-On Learning: We emphasize practical, hands-on learning experiences. Our workshops and projects are designed to bridge the gap between theoretical knowledge and real-world application.
+
+              Collaboration and Networking: Beyond coding, we value the power of collaboration. Our club provides opportunities to network with industry professionals, attend tech events, and connect with potential collaborators.
+            </Text>
+          </Card>
+        </Container>
+
+      </div>
+
     </div>
   );
 }
