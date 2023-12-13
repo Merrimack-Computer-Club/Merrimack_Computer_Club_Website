@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Text, Avatar, Button } from '@mantine/core';
+import { Box, Text, Avatar, Button } from '@mantine/core'; //Mantine UI
 import { database } from '../pages/firebaseConfig';
 import { onValue, ref, set } from 'firebase/database';
 import Post from '../components/Post';
@@ -86,7 +86,7 @@ function User() {
   const user = localStorage.getItem('email');
   const [firstName, setFirstName] = useState('');
   const [userAvatar, setUserAvatar] = useState('');
-
+//UseEffect uses Box and text elements from mantine
   useEffect(() => {
     const fetchUserData = async () => {
       if (user) {
@@ -111,8 +111,8 @@ function User() {
           User Page
         </Text>
       </div>
-
-      <Box maw={'50%'} mx="auto">
+    
+      <Box maw={'50%'} mx="auto"> 
         {user && userAvatar && (
           <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
             <Avatar
