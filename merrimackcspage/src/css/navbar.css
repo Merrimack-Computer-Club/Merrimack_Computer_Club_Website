@@ -1,5 +1,4 @@
 .NavBarClass {
-    padding-top: 0px;
     margin: 0;
     position: fixed;
     background-image: url("../../public/background.png");
@@ -13,7 +12,7 @@
 
 body {
     margin: 0;
-    padding-top: 50px; /* Adjust this value according to your navbar height */
+    padding-top: 50px;
 }
 
 /* Nav bar reference: https://www.w3schools.com/css/css_navbar_horizontal.asp */
@@ -27,21 +26,27 @@ ul {
     position: fixed;
     top: 10px;
     width: 100%;
+    padding-bottom: 5px;
 }
 
 ul Button {
-    margin: 20px;
+    margin-right: 20px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    
     float: right;
     font-family: var(--poppinsBold);
     color: white;
 }
 
-ul Button h1{
-   font-size: var(--smallFont);
+ul Button h1 {
+    font-size: 1.25rem;
+    padding: 5px;
 }
 
 li {
-    padding-top: 20px;
+    margin-top: 20px;
+    margin-bottom: 10px;
     float: left;
 }
 
@@ -49,12 +54,37 @@ li a {
     display: block;
     color: black;
     font-family: var(--poppinsBold);
-    font-size: var(--mediumFont);
+    font-size: 1.25rem;
     text-align: center;
-    padding: 0px 16px;
+    padding: 0px 15px;
     text-decoration: none;
 }
 
 li a span:hover {
     border-bottom: 5px blue solid;
+}
+
+
+@media screen and (max-width: 800px) {
+    li a {
+        font-size: 1rem;
+        margin-top: 5px;
+        padding: 0px 10px;
+    }
+
+    ul Button h1 {
+        font-size: 1rem;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    li a {
+        font-size: .75rem;
+        padding: 0px 5px;
+    }
+
+    ul Button h1 {
+        font-size: .75rem;
+        padding: 0px;
+    }
 }
