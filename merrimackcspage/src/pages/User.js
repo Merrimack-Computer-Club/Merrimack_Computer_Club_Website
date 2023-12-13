@@ -18,8 +18,12 @@ function ColoredBox({ children }) {
   const boxStyle = {
     backgroundColor: "rgba(255, 255, 255, 0.795)",
     padding: '10px',
-    margin: '10px',
+    marginTop: '10px',
     borderRadius: '8px',
+    minWidth: '60vw',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
   };
 
   return <div style={boxStyle}>{children}</div>;
@@ -68,7 +72,7 @@ function PostsList({ currentUser, firstName }) {
               title={post.title}
               tags={post.tags}
               resources={post.resources}
-              in_comments={post.n.in_comments}
+              in_comments={post.in_comments}
             />
           </ColoredBox>
         ))
