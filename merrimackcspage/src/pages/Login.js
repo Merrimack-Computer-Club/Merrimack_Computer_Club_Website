@@ -31,6 +31,9 @@ function Login({ setLoggedIn }) {
       const path = `users/${firebaseKey}`;
       console.log("Firebase Path:", path);
 
+      // Update the localStorage to contain the usersid
+      localStorage.setItem("userid", firebaseKey);
+
       // Use the set function on the reference to add data to the path
       await set(ref(db, path), {
         email: email,

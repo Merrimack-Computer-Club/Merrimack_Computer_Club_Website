@@ -6,10 +6,12 @@ import { Link } from 'react-router-dom';
 function Navbar({ isLoggedIn, onLogout }) {
   return (
     <div className='NavBarClass'>
-      <ul>
-        <li><a className="active" href="/"><span>Home</span></a></li>
-        <li><a href="/blog"><span>Blog</span></a></li>
-        <li><a href="/user"><span>User Profile</span></a></li>
+
+    <ul>
+      <li ><a className="active" href="/"><span>Home</span></a></li>
+      <li ><a href="/Knowledgebase"><span>Knowledgebase</span></a></li>
+      <li ><a href="/user"><span>Profile</span></a></li>
+    
         {isLoggedIn ? (
           // If logged in, show the logout button
           <Button style={{ borderRadius: '20px' }} onClick={onLogout}>
