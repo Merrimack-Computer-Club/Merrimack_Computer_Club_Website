@@ -55,7 +55,7 @@ function PostsList({ currentUser, firstName, userAvatar }) {
     <div className="posts-list">
       {firstName && (
         <Text size="lg" style={{ marginBottom: '10px' }}>
-          Welcome, {firstName}! See and edit all of your posts below
+           See and edit all of your posts below
         </Text>
       )}
 
@@ -127,7 +127,7 @@ function User() {
             />
             <div style={{ marginLeft: '20px' }}>
               <Text size="lg">Welcome, {firstName}!</Text>
-              <Text>No description available</Text>
+              
             </div>
           </div>
         )}
