@@ -1,14 +1,19 @@
 import {React, useState} from 'react';
-import { Button } from '@mantine/core';
+import { Button, Image } from '@mantine/core';
+import '../css/variables.css';
 import '../css/navbar.css';
 import { Link } from 'react-router-dom';
 
 function Navbar({ isLoggedIn, onLogout }) {
   
+  const logo_path = './merrimack-computer-club-removebg-preview.png';
+
   return (
     <div className='NavBarClass'>
 
     <ul>
+
+      <li style={{paddingTop: "15px", marginRight: "10px"}}><a href="/"><Image href="/" radius="md" h={50} w="auto" fit="contain" src={logo_path} style={{backgroundColor: "black"}} /></a></li>   {/* Logo */}
       <li ><a className="active" href="/"><span>Home</span></a></li>
       <li ><a href="/Knowledgebase"><span>Knowledgebase</span></a></li>
       <li ><a href="/user"><span>Profile</span></a></li>
