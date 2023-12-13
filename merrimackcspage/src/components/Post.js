@@ -2,7 +2,7 @@ import React, { useEffect, useState, useReducer } from "react";
 import '../css/knowledgebase.css';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { Text, Button, TagsInput, Collapse, TextInput } from '@mantine/core';
+import { Text, Button, TagsInput, Collapse, TextInput, Divider } from '@mantine/core';
 import { app, database } from '../pages/firebaseConfig';
 import { getDatabase, ref, onValue, push, child, update, get, set, remove} from "firebase/database";
 import Comment from "./Comment";
@@ -232,14 +232,18 @@ function Post({key, userID, userEmail, createTime, updateTime, information, titl
 
             {/* If not currently editing, but able to edit. Add the Edit button */}
             {canEdit() &&
-                <div style={{display: "flex", justifyContent: "center", alignContent: "center", margin: "5px 5px 5px 5px"}} >
-                    <Button onClick={editClicked} variant="gradient" gradient={{ from: 'blue', to: 'cyan', deg: 0 }} size="sm">Edit</Button>
-                </div>
+                <div className="edit-options">
+                    <Divider my="md" /> {/* Divider for comment section */}
+                    <div style={{display: "flex", justifyContent: "center", alignContent: "center", margin: "5px 5px 5px 5px"}} >
+                        <Button onClick={editClicked} variant="gradient" gradient={{ from: 'blue', to: 'cyan', deg: 0 }} size="sm">Edit</Button>
+                    </div>
+                </div>   
             }
 
             {/* Display comments if logged in*/}
             {hasEmail() && hasUserID() &&
                 <div className="comments">
+                    <Divider my="md" /> {/* Divider for comment section */}
                     <div className="commentsInput">
                         <TextInput label="Create comment" value={comment} onChange={(event) => setComment(event.currentTarget.value)} style={{marginRight: "10px", minWidth: "75%"}}/>
                         <Button onClick={submitComment} variant="gradient" gradient={{ from: 'blue', to: 'green', deg: 0 }} size="sm" style={{marginRight: "10px"}}>Submit</Button>
