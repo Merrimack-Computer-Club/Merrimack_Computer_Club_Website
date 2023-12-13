@@ -30,7 +30,6 @@
     flex-direction: column;
     border-radius: 10px;
     padding: 10px 10px 10px 10px;
-    min-width:max-content;
 }
 
 .knowledgebase {
@@ -64,6 +63,11 @@
 
 .ql-editor {
     min-height: 300px;
+}
+
+.quill  .ql-container{
+    display: flex;
+    flex-wrap: wrap-reverse;
 }
 
 .resources {

@@ -1,9 +1,10 @@
-import React from 'react';
+import {React, useState} from 'react';
 import { Button } from '@mantine/core';
 import '../css/navbar.css';
 import { Link } from 'react-router-dom';
 
 function Navbar({ isLoggedIn, onLogout }) {
+  
   return (
     <div className='NavBarClass'>
 
