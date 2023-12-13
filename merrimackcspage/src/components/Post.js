@@ -21,7 +21,7 @@ import Comment from "./Comment";
  * 
  * @returns 
  */
-function Post({key, userID, userEmail, createTime, updateTime, information, title, tags, resources, in_comments }) {
+function Post({ userID, userEmail, createTime, updateTime, information, title, tags, resources, in_comments }) {
 
     const [value, setValue] = useState(information);
     const [editing, setEditing] = useState(false);
@@ -188,7 +188,7 @@ function Post({key, userID, userEmail, createTime, updateTime, information, titl
 
   return (
 
-    <div className="post" id={key}>
+    <div className="post" id={title}>
         
         <div className="title">
             <Text size="xl" style={{borderBottom: "2px black solid"}}>{title}</Text>

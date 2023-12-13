@@ -63,6 +63,7 @@ function PostsList({ currentUser, firstName, userAvatar }) {
         posts.map((post) => (
           <ColoredBox key={post.id}>
             <Post
+              key={post.title}
               userID={post.maintainer}
               userEmail={post.maintainer_email}
               createTime={post.creationTime}

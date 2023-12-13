@@ -10,7 +10,7 @@ import { IconX } from '@tabler/icons-react';
  * 
  * @returns 
  */
-function Comment({key, comment_id, comment, commenter, commenter_email, createTime, removeComment }) {
+function Comment({comment_id, comment, commenter, commenter_email, createTime, removeComment }) {
 
     const [value, setValue] = useState(comment);
 
@@ -38,7 +38,7 @@ function Comment({key, comment_id, comment, commenter, commenter_email, createTi
 
   return (
 
-    <div className="comment" id={key}>
+    <div className="comment" id={comment_id}>
         {/* Assure the comment is not deleted */}
         <Blockquote icon={isUsersComment() ? X_icon : null} iconSize={15} color="blue" cite={`${commenter_email}  -  ${new Date(createTime).toLocaleString("en", date_options)}`} radius="xs" mt="xs" style={{padding: "2px 2px 8px 8px"}}>
             {value}
