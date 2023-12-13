@@ -51,6 +51,10 @@
     flex-wrap: wrap;
 }
 
+.post-container {
+    max-width: 75%;
+}
+
 .search {
     display: flex;
     flex-direction: column;
@@ -92,4 +96,10 @@
     flex-direction: row;
     align-items: flex-end;
     padding: 10px 10px 10px 10px;
+}
+
+@media screen and (max-width: 800px) {
+   .post-container {
+    max-width: 100%;
+   }
 }
