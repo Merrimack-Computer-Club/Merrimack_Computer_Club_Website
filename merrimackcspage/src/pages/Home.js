@@ -133,15 +133,15 @@ function Home() {
             <Text mt="sm" size="sm" c="dimmed" span inherit>
               Our mission is to foster a welcoming space where students can:
 
-              Learn: Engage in hands-on learning experiences through workshops, projects, and collaborative coding sessions.
-              Innovate: Explore and push the boundaries of technology, encouraging creative problem-solving and out-of-the-box thinking.
-              Connect: Build lasting connections with like-minded peers, industry professionals, and mentors within the expansive tech community.
-              Contribute: Contribute to open-source projects, showcase individual talents, and make a positive impact on campus and beyond.
-              Inclusive Community: We believe that diversity fuels innovation. Our club welcomes students of all skill levels, backgrounds, and majors. Whether you're a seasoned developer or just starting your coding journey, there's a place for you here.
+               <b> Learn</b>: Engage in hands-on learning experiences through workshops, projects, and collaborative coding sessions.
+               <b> Innovate</b>: Explore and push the boundaries of technology, encouraging creative problem-solving and out-of-the-box thinking.
+               <b> Connect</b>: Build lasting connections with like-minded peers, industry professionals, and mentors within the expansive tech community.
+               <b> Contribute</b>: Contribute to open-source projects, showcase individual talents, and make a positive impact on campus and beyond.
+               <b> Inclusive Community</b>: We believe that diversity fuels innovation. Our club welcomes students of all skill levels, backgrounds, and majors. Whether you're a seasoned developer or just starting your coding journey, there's a place for you here.
 
-              Hands-On Learning: We emphasize practical, hands-on learning experiences. Our workshops and projects are designed to bridge the gap between theoretical knowledge and real-world application.
+               <b> Hands-On Learning</b>: We emphasize practical, hands-on learning experiences. Our workshops and projects are designed to bridge the gap between theoretical knowledge and real-world application.
 
-              Collaboration and Networking: Beyond coding, we value the power of collaboration. Our club provides opportunities to network with industry professionals, attend tech events, and connect with potential collaborators.
+               <b> Collaboration and Networking</b>: Beyond coding, we value the power of collaboration. Our club provides opportunities to network with industry professionals, attend tech events, and connect with potential collaborators.
             </Text>
           </Card>
         </Container>
