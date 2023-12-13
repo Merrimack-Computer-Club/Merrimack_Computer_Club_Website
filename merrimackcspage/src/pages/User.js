@@ -16,7 +16,7 @@ function getRandomColor() {
 
 function ColoredBox({ children }) {
   const boxStyle = {
-    backgroundColor: getRandomColor(),
+    backgroundColor: "rgba(255, 255, 255, 0.795)",
     padding: '10px',
     margin: '10px',
     borderRadius: '8px',
