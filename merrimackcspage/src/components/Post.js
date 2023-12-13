@@ -4,7 +4,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { Text, Button, TagsInput, Collapse, TextInput } from '@mantine/core';
 import { app, database } from '../pages/firebaseConfig';
-import { getDatabase, ref, onValue, push, child, update, get, set, remove } from "firebase/database";
+import { getDatabase, ref, onValue, push, child, update, get, set, remove} from "firebase/database";
 import Comment from "./Comment";
 
 /**
@@ -31,6 +31,7 @@ function Post({key, userID, userEmail, createTime, updateTime, information, titl
     const [comments, setComments] = useState(in_comments);
 
     useEffect(() => {
+
        // Determine if we have resources
        var worked = resources !== null && resources !== undefined;
        var temp = "";
@@ -48,7 +49,7 @@ function Post({key, userID, userEmail, createTime, updateTime, information, titl
     function saveClicked() {
 
         // Update the reference in the database
-        update(ref(database, `knowledgebase/${title}`), {information: value});
+        update(ref(database, `knowledgebase/${title}`), {information: value, updateTime: Date.now()});
 
         setEditing(false);
     }
@@ -110,26 +111,9 @@ function Post({key, userID, userEmail, createTime, updateTime, information, titl
                 creationTime: Date.now()
             }
 
-            // Find the last key, to append this comment to the object in firebase
-            var lastKey = 0;
-            for(var k in temp) {
-                if(k > lastKey) 
-                    lastKey = Number(k);
-            }
+            temp[Object.keys(temp).length == 0 ? 0 : (Object.keys(temp).length)] = commentTemp;
+            update(ref(database, `knowledgebase/${title}`), {in_comments: temp});
 
-            temp[lastKey == 0 ? 0 : lastKey + 1] = commentTemp;
-
-            // Construct the path
-            get(ref(db, `knowledgebase/${title}/comments`)).then(snapshot => {
-                if(snapshot.exists()) {
-                    console.log(comments);
-                    update(ref(database, `knowledgebase/${title}`), {comments: temp});
-                } else {
-                    console.log(comments);
-                    set(ref(database, `knowledgebase/${title}`), {comments: temp});
-                }
-            });
-            
             setComments(temp);
             setComment('');
 
@@ -237,7 +221,14 @@ function Post({key, userID, userEmail, createTime, updateTime, information, titl
                         <TextInput label="Create comment" value={comment} onChange={(event) => setComment(event.currentTarget.value)} style={{marginRight: "10px", minWidth: "75%"}}/>
                         <Button onClick={submitComment} variant="gradient" gradient={{ from: 'blue', to: 'green', deg: 0 }} size="sm" style={{marginRight: "10px"}}>Submit</Button>
                     </div>
-                    <Comment key="key" comment="This is an example comment." commenter_email={userEmail} createTime={1000} ></Comment>
+
+                    <div className="comment-list">
+                        {/* Loop over each comment, and create a new comment component for it */}
+                        {comments !== null && comments !== undefined && Object.keys(comments).forEach(n => {
+                            console.log(n);
+                            <Comment key={n} comment={comments[n].comment} commenter={comments[n].commenter} commenter_email={comments[n].commenter_email} createTime={comments[n].creationTime} ></Comment>
+                        })}
+                    </div>
                 </div>
             }
             </div>

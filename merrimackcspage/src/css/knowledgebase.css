@@ -78,6 +78,10 @@
     align-items: center;
 }
 
+.content {
+    min-width: 50vw;
+}
+
 .comment {
 
 }

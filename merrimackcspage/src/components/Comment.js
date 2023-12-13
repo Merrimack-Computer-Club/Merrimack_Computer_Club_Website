@@ -10,7 +10,7 @@ import { IconInfoCircle } from '@tabler/icons-react';
  * 
  * @returns 
  */
-function Comment({key, comment, commenter_email, createTime }) {
+function Comment({key, comment, commenter, commenter_email, createTime }) {
 
     const [value, setValue] = useState(comment);
 
