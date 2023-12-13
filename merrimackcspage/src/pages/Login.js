@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { set, ref } from 'firebase/database';  
 import '../css/login.css';
 
-function Login() {
+function Login({ setLoggedIn }) {
   const [email, setEmail] = useState(null);
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -70,6 +70,9 @@ function Login() {
 
     // Trigger the addUserToFirebase function
     addUserToFirebase(decode.email, firstName, lastName);
+
+    // Update the login status in the App component
+    setLoggedIn(true);
 
     navigate("/");
   };

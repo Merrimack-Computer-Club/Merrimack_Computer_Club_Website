@@ -1,15 +1,15 @@
-import './App.css';
-import React from "react";
-import { MantineProvider } from "@mantine/core"
+import React, { useState } from 'react';
+import { MantineProvider } from "@mantine/core";
 import '@mantine/core/styles.css';
-import './css/variables.css'
-
+import './css/variables.css';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import Navbar from "./components/Navbar";
+
 import Home from './pages/Home'
 import Knowledgebase from './pages/Knowledgebase'
 import Login from './pages/Login'
 import User from './pages/User'
+
 
 import {
   BrowserRouter as Router,
@@ -17,19 +17,31 @@ import {
   Route,
 } from "react-router-dom";
 
-
-
-// Routing Reference: https://www.geeksforgeeks.org/how-to-create-a-multi-page-website-using-react-js/
 function App() {
+  const [isLoggedIn, setLoggedIn] = useState(false);
+
+  const handleLogout = () => {
+    // Implement your logout logic here
+    setLoggedIn(false);
+  };
+
   return (
     <GoogleOAuthProvider clientId="1052801351450-injkge7jr3h8gj19f16pbe81ktu9ruo2.apps.googleusercontent.com">
       <MantineProvider defaultColorScheme="light">
         <Router>
-          <Navbar />
+          <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
           <Routes>
             <Route exact path="/" element={<Home />} />
+
             <Route path="/Knowledgebase" element={<Knowledgebase />} />
             <Route path="/login" element={<Login />} />
+
+            <Route path="/blog" element={<Blog />} />
+            <Route
+              path="/login"
+              element={<Login setLoggedIn={setLoggedIn} />}
+            />
+
             <Route path="/user" element={<User />} />
           </Routes>
         </Router>
