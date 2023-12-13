@@ -5,6 +5,26 @@ import { onValue, ref } from 'firebase/database';
 import Post from '../components/Post';
 import '../css/knowledgebase.css';
 
+function getRandomColor() {
+  const letters = '0123456789ABCDEF';
+  let color = '#';
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
+function ColoredBox({ children }) {
+  const boxStyle = {
+    backgroundColor: getRandomColor(),
+    padding: '10px',
+    margin: '10px',
+    borderRadius: '8px',
+  };
+
+  return <div style={boxStyle}>{children}</div>;
+}
+
 function PostsList({ currentUser, firstName }) {
   const [posts, setPosts] = useState([]);
 
@@ -31,24 +51,26 @@ function PostsList({ currentUser, firstName }) {
     <div className="posts-list">
       {firstName && (
         <Text size="lg" style={{ marginBottom: '10px' }}>
-          Welcome, {firstName}!
+          Welcome, {firstName}! 
+          See and edit all of your posts below
         </Text>
       )}
 
       {posts.length > 0 ? (
         posts.map((post) => (
-          <Post
-            key={post.id}
-            userID={post.maintainer}
-            userEmail={post.maintainer_email}
-            createTime={post.creationTime}
-            updateTime={post.updateTime}
-            information={post.information}
-            title={post.title}
-            tags={post.tags}
-            resources={post.resources}
-            comments={post.comments}
-          />
+          <ColoredBox key={post.id}>
+            <Post
+              userID={post.maintainer}
+              userEmail={post.maintainer_email}
+              createTime={post.creationTime}
+              updateTime={post.updateTime}
+              information={post.information}
+              title={post.title}
+              tags={post.tags}
+              resources={post.resources}
+              comments={post.comments}
+            />
+          </ColoredBox>
         ))
       ) : (
         <Text>No posts found for the current user.</Text>
