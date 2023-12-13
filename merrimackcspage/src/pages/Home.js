@@ -217,50 +217,7 @@ function Home() {
         </Row>
       </Container>
 
-      <Container fluid className="kb">
-        <Row className="justify-content-center">
-          {knowledgeBase.map((entry) => (
-            <Col className='individual-kb' key={entry.id} xs={12} sm={12} md={8} lg={5} >
-              <div>
-                <strong>Description:</strong> {entry.description}<br />
-
-                {/* Show resource link */}
-                <strong>Resource:</strong> {isImageUrl(entry.resource) ? (
-                  <img src={entry.resource} alt="Resource" style={{ width: '100%', maxHeight: '500px' }} />
-                ) : (
-                  <a href={entry.resource} target="_blank" rel="noopener noreferrer">{entry.resource}</a>
-                )}
-                <br />
-
-                {/* Comments section */}
-                <div>
-                  <strong>Comments:</strong>
-                  {comments[entry.id] && comments[entry.id].map((comment, index) => (
-                    <li key={index}>{comment.comment}</li>
-                  ))}
-                </div>
-
-                {/* Comment form */}
-                <form onSubmit={(e) => handleCommentSubmit(entry.id, e)}>
-                  <Form.Control
-                    label="Comment"
-                    name="comment"
-                    as="textarea"
-                    rows={2}
-                    value={commentFormData.comment}
-                    onChange={(e) => setCommentFormData({ comment: e.target.value })}
-                    placeholder="Enter your comment"
-                  />
-                  <Button type="submit">Add Comment</Button>
-                </form>
-                <br />
-              </div>
-            </Col>
-          ))}
-        </Row>
-      </Container>
-
-
+      
       <Container>
         <Row>
           <Col>
@@ -276,7 +233,7 @@ function Home() {
                   placeholder="Enter Description"
                 />
                 <Form.Control
-                  label="Resource Link"
+                  label="Resource Link" 
                   name="resource"
                   type="text"
                   value={knowledgeBaseFormData.resource}

@@ -77,3 +77,19 @@
     justify-content: center;
     align-items: center;
 }
+
+.content {
+    min-width: 50vw;
+}
+
+.comments {
+    display: flex;
+    flex-direction: column;
+}
+
+.commentsInput {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    padding: 10px 10px 10px 10px;
+}
