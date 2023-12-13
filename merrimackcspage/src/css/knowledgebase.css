@@ -82,10 +82,6 @@
     min-width: 50vw;
 }
 
-.comment {
-
-}
-
 .comments {
     display: flex;
     flex-direction: column;

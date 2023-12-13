@@ -134,6 +134,26 @@ function Post({key, userID, userEmail, createTime, updateTime, information, titl
         return false;
     }
 
+    /**
+     * Removes this comment from the post
+     */
+    function removeComment(idx) {
+        remove(ref(database, `knowledgebase/${title}/in_comments/${idx}`)).then(() => {
+            console.log(`Comment ${idx} removed`);
+
+        
+            // Remove the item from the parents comments state.
+            setComments(current => {
+                delete current[idx];
+                console.log(current);
+                return current;
+            });
+
+            console.log(comments);
+        });
+        
+    }
+
     function hasResources() {
         // Determine if we have resources
         return resources !== null && resources !== undefined;
@@ -224,9 +244,8 @@ function Post({key, userID, userEmail, createTime, updateTime, information, titl
 
                     <div className="comment-list">
                         {/* Loop over each comment, and create a new comment component for it */}
-                        {comments !== null && comments !== undefined && Object.keys(comments).forEach(n => {
-                            console.log(n);
-                            <Comment key={n} comment={comments[n].comment} commenter={comments[n].commenter} commenter_email={comments[n].commenter_email} createTime={comments[n].creationTime} ></Comment>
+                        {comments !== null && comments !== undefined && Object.keys(comments).map(n => {
+                            return <Comment key={n} comment_id={n} comment={comments[n].comment} commenter={comments[n].commenter} commenter_email={comments[n].commenter_email} createTime={comments[n].creationTime} removeComment={removeComment}></Comment>
                         })}
                     </div>
                 </div>
