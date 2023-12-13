@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Container, Button, Row, Col, Form } from "react-bootstrap";
+import { Container, Button, Row, Col, Form} from "react-bootstrap";
+import { Card, Image, Text, Badge, Group, Divider} from '@mantine/core';
 import { app as firebaseApp } from './firebaseConfig';
+import { getDatabase, ref, onValue, push, child, update } from "firebase/database";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/home.css";
 import StockVideo from "../components/StockVideo";
-
 function Home() {
-  // Database vars
-  const db = getDatabase();
-  const knowledgeBaseRef = ref(db, 'knowledgeBases/')
+  
 
   const [triggerBlur, setTriggerBlur] = useState(false)
 
@@ -38,6 +37,9 @@ function Home() {
   function isImageUrl(url) {
     return /\.(jpeg|jpg|gif|png)$/.test(url);
   }
+
+  const image_1_path = './images/cs-image-2.png'
+  const image_2_path = './images/cs-image-3.png'
 
   return (
     <div>
@@ -98,7 +100,7 @@ function Home() {
 
         {/* About us: */}
         <Container className="content-container">
-          <Card shadow="sm" padding="lg" radius="md" withBorder>
+          <Card shadow="sm" padding="lg" radius="md" withBorder className='content-container-inner'>
             <Card.Section>
               <Image
                 src={image_1_path}
@@ -123,7 +125,7 @@ function Home() {
 
         {/* Mission Statement: */}
         <Container className="content-container">
-          <Card shadow="sm" padding="lg" radius="md" withBorder>
+          <Card shadow="sm" padding="lg" radius="md" withBorder className='content-container-inner'>
             <Card.Section>
               <Image
                 src={image_2_path}

@@ -1,3 +1,15 @@
+.content-container-inner {
+  width: 100%;
+  margin: auto;
+}
+
+
+/* @media screen and (max-width: 800px) {
+  .content-container-inner {
+    width: 50%;
+  }
+} */
+
 .content-container{
   height: 55rem;
 }
