@@ -18,64 +18,76 @@ function Login({ setLoggedIn }) {
     mt: 'md',
   };
 
-  const addUserToFirebase = async (email, firstName, lastName) => {
+  const addUserToFirebase = async (email, firstName, lastName, user_description, avatar) => {
     try {
       // Get a reference to the Realtime Database
       const db = database;
-
+  
       // Use the email before "@merrimack.edu" as the Firebase key
       const firebaseKey = email.split('@')[0].replace(/\./g, ",");
       console.log("Firebase Key:", firebaseKey);
-
+  
       // Construct the path
       const path = `users/${firebaseKey}`;
       console.log("Firebase Path:", path);
-
-      // Update the localStorage to contain the usersid
+  
+      // Update the localStorage to contain the userid
       localStorage.setItem("userid", firebaseKey);
-
+  
+      // Provide default values for user_description and avatar if not set
+      const defaultUserDescription = "User description not set, please update your profile.";
+      const defaultAvatar = "path-to-default-avatar.jpg";
+  
       // Use the set function on the reference to add data to the path
       await set(ref(db, path), {
         email: email,
         firstName: firstName,
         lastName: lastName,
-        // Add other user data as needed
+        user_description: user_description || defaultUserDescription,
+        avatar: avatar || defaultAvatar,
       });
-
+  
       console.log("User added to Firebase Realtime Database");
     } catch (error) {
       console.error("Error adding user to Firebase:", error);
       setError("Error adding user to Firebase");
     }
   };
+  
+  
+  
+  
 
   const handleGoogleLoginSuccess = (credentialResponse) => {
     setError("");
-
+  
     const decode = jwtDecode(credentialResponse.credential);
-
+  
     if (!decode.email.endsWith("@merrimack.edu")) {
       setError("User must log in with a Merrimack email address.");
       console.log("Must log in with a Merrimack Email.");
       return;
     }
-
+  
     // Update the state and navigate
     setEmail(decode.email);
     localStorage.setItem("email", decode.email);
-
+  
     // Extract first and last names from the decoded JWT
     const firstName = decode.given_name || '';
     const lastName = decode.family_name || '';
+    const avatar = decode.picture || '';
+    // Trigger the addUserToFirebase function with the Google avatar
+    // Trigger the addUserToFirebase function with the Google avatar
+addUserToFirebase(decode.email, firstName, lastName, "", avatar);
 
-    // Trigger the addUserToFirebase function
-    addUserToFirebase(decode.email, firstName, lastName);
-
+  
     // Update the login status in the App component
     setLoggedIn(true);
-
+  
     navigate("/");
   };
+  
 
   return (
     <div className="container">

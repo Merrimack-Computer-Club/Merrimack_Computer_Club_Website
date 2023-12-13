@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Text } from '@mantine/core';
+import { Box, Text, Avatar, Button } from '@mantine/core';
 import { database } from '../pages/firebaseConfig';
-import { onValue, ref } from 'firebase/database';
+import { onValue, ref, set } from 'firebase/database';
 import Post from '../components/Post';
 import '../css/knowledgebase.css';
 
@@ -16,7 +16,7 @@ function getRandomColor() {
 
 function ColoredBox({ children }) {
   const boxStyle = {
-    backgroundColor: "rgba(255, 255, 255, 0.795)",
+    backgroundColor: 'rgba(255, 255, 255, 0.795)',
     padding: '10px',
     margin: '10px',
     borderRadius: '8px',
@@ -25,7 +25,7 @@ function ColoredBox({ children }) {
   return <div style={boxStyle}>{children}</div>;
 }
 
-function PostsList({ currentUser, firstName }) {
+function PostsList({ currentUser, firstName, userAvatar }) {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
@@ -51,8 +51,7 @@ function PostsList({ currentUser, firstName }) {
     <div className="posts-list">
       {firstName && (
         <Text size="lg" style={{ marginBottom: '10px' }}>
-          Welcome, {firstName}! 
-          See and edit all of your posts below
+          Welcome, {firstName}! See and edit all of your posts below
         </Text>
       )}
 
@@ -82,6 +81,7 @@ function PostsList({ currentUser, firstName }) {
 function User() {
   const user = localStorage.getItem('email');
   const [firstName, setFirstName] = useState('');
+  const [userAvatar, setUserAvatar] = useState('');
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -90,7 +90,8 @@ function User() {
         onValue(userRef, (snapshot) => {
           const userData = snapshot.val();
           if (userData) {
-            setFirstName(userData.firstName || ''); // Assuming first name is stored in the 'firstName' field
+            setFirstName(userData.firstName || '');
+            setUserAvatar(userData.avatar || '');
           }
         });
       }
@@ -108,11 +109,29 @@ function User() {
       </div>
 
       <Box maw={'50%'} mx="auto">
-        {user ? (
-          <PostsList currentUser={user} firstName={firstName} />
-        ) : (
-          <Text>Please sign in to access this page.</Text>
+        {user && userAvatar && (
+          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+            <Avatar
+              src={userAvatar}
+              alt="User Avatar"
+              radius={50} 
+              style={{
+                border: `8px solid ${getRandomColor()}`, 
+                width: '100px',
+                height: 'auto',
+              }}
+            />
+            <div style={{ marginLeft: '20px' }}>
+              <Text size="lg">Welcome, {firstName}!</Text>
+              <Text>No description available</Text>
+            </div>
+          </div>
         )}
+        {user && !userAvatar && <Text>No avatar found for the user.</Text>}
+        {!user && <Text>Please sign in to access this page.</Text>}
+
+        {/* PostsList component */}
+        {user && userAvatar && <PostsList currentUser={user} firstName={firstName} userAvatar={userAvatar} />}
       </Box>
     </div>
   );
