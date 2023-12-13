@@ -122,7 +122,7 @@ function CreatePostForm() {
                 <Text size="xl" style={{borderBottom: "2px black solid"}}>Create a Post</Text>
              </div>
         
-            <Box maw={"50%"} mx="auto">
+            <Box maw={"90%"} mx="auto">
                 <form onSubmit={form.onSubmit((values) =>{
                     setSubmittedValues(JSON.stringify(values))
                     postHandler();
