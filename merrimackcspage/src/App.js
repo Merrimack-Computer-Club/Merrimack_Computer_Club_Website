@@ -34,9 +34,7 @@ function App() {
             <Route exact path="/" element={<Home />} />
 
             <Route path="/Knowledgebase" element={<Knowledgebase />} />
-            <Route path="/login" element={<Login />} />
-
-            <Route path="/blog" element={<Blog />} />
+        
             <Route
               path="/login"
               element={<Login setLoggedIn={setLoggedIn} />}
