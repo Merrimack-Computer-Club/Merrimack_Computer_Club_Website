@@ -100,7 +100,7 @@ function Home() {
 
         {/* About us: */}
         <Container className="content-container">
-          <Card shadow="sm" padding="lg" radius="md" withBorder className='content-container-inner'>
+          <Card shadow="sm" radius="md" withBorder className='content-container-inner'>
             <Card.Section>
               <Image
                 src={image_1_path}
@@ -125,7 +125,7 @@ function Home() {
 
         {/* Mission Statement: */}
         <Container className="content-container">
-          <Card shadow="sm" padding="lg" radius="md" withBorder className='content-container-inner'>
+          <Card shadow="sm" radius="md" withBorder className='content-container-inner'>
             <Card.Section>
               <Image
                 src={image_2_path}

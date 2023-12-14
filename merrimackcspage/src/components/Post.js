@@ -190,6 +190,16 @@ function Post({ userID, userEmail, createTime, updateTime, information, title, t
 
     <div className="post" id={title}>
         
+        {/* If not currently editing, but able to edit. Add the Edit button */}
+        {canEdit() &&
+            <div className="edit-options">
+                <div style={{display: "flex", justifyContent: "center", alignContent: "center", margin: "5px 5px 5px 5px"}} >
+                    <Button onClick={editClicked} variant="gradient" gradient={{ from: 'blue', to: 'cyan', deg: 0 }} size="sm">Edit</Button>
+                </div>
+                <Divider my="md" /> {/* Divider for comment section */}
+            </div>   
+        }
+
         <div className="title">
             <Text size="xl" style={{borderBottom: "2px black solid"}}>{title}</Text>
         </div>
@@ -229,16 +239,6 @@ function Post({ userID, userEmail, createTime, updateTime, information, title, t
                     </Collapse>
                 </div>   
                 }
-
-            {/* If not currently editing, but able to edit. Add the Edit button */}
-            {canEdit() &&
-                <div className="edit-options">
-                    <Divider my="md" /> {/* Divider for comment section */}
-                    <div style={{display: "flex", justifyContent: "center", alignContent: "center", margin: "5px 5px 5px 5px"}} >
-                        <Button onClick={editClicked} variant="gradient" gradient={{ from: 'blue', to: 'cyan', deg: 0 }} size="sm">Edit</Button>
-                    </div>
-                </div>   
-            }
 
             {/* Display comments if logged in*/}
             {hasEmail() && hasUserID() &&
