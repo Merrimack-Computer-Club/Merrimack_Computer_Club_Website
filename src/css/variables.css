@@ -1,0 +1,21 @@
+/* Stores commonly used colors in css variables */
+
+@font-face {
+    font-family: PoppinsRegular;
+    src: url(../fonts/PoppinsRegular.ttf);
+}
+
+@font-face {
+    font-family: PoppinsBold;
+    src: url(../fonts/PoppinsBold.ttf);
+}
+
+
+:root {
+    --poppinsRegular: 'PoppinsRegular';
+    --poppinsBold: 'PoppinsBold';
+    --extraSmallFont: .75rem;
+    --smallFont: 1rem;
+    --mediumFont: 1.5rem;
+    --largeFont: 2rem;
+}
