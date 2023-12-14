@@ -23,9 +23,7 @@ function Member({id, first_name, last_name, email, description, avatar_img}) {
                 </Card.Section>
 
                 <Card.Section>
-                    <Text mt="sm" size="sm" c="dimmed" span inherit>
-                        {description}
-                    </Text>
+                    <Text mt="sm" size="sm" c="dimmed" span inherit dangerouslySetInnerHTML={{__html: description}}></Text>
                 </Card.Section>
 
             </Card>
