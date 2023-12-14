@@ -13,7 +13,7 @@ function Footer() {
 
   return (
     <div className='Footer'>
-      <ul>
+      <ul className='footer-ul'>
 
           <li><Avatar><a href={github_url}><IconBrandGithub size="1.5rem" /></a></Avatar></li>
           <li><Avatar><a href={linkedin_url}><IconBrandLinkedin size="1.5rem" /></a></Avatar></li>
