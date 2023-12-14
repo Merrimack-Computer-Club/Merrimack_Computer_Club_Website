@@ -22,7 +22,59 @@
     height: 10px;
     width: 100%;
 }
+.NavBarClass ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
+.NavBarClass li {
+  margin: 0 10px;
+}
+
+/* Mobile Menu Icon Styles */
+.mobile-menu-icon {
+  display: none; /* Hide the menu icon by default */
+  cursor: pointer;
+  padding: 10px; /* Add padding for better clickability */
+}
+
+.menu-icon-line {
+  width: 25px;
+  height: 3px;
+  background-color: blue;
+  margin: 5px 0;
+}
+
+/* Media Query for Mobile */
+@media screen and (max-width: 768px) {
+  .NavBarClass ul {
+    flex-direction: column;
+    align-items: flex-start;
+    position: relative;
+  }
+
+  .NavBarClass li {
+    margin: 10px 0;
+  }
+
+  .mobile-menu-icon {
+    display: block; /* Show the menu icon on smaller screens */
+  }
+
+  /* Hide the menu items when the mobile menu is closed */
+  .NavBarClass ul:not(.mobile-menu-open) li:not(.mobile-menu-icon) {
+    display: none;
+  }
+
+  /* Show the menu items when the mobile menu is open */
+  .NavBarClass ul.mobile-menu-open li {
+    display: block;
+  }
+}
 body {
     margin: 0;
     padding-top: 50px;
