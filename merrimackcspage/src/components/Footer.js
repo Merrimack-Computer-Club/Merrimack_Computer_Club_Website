@@ -13,7 +13,6 @@ function Footer() {
 
   return (
     <footer className='Footer'>
-      <div className='space' style={{minHeight: '80vh'}}></div>
       <ul className='footer-ul'>
 
           <li><Avatar><a href={github_url}><IconBrandGithub size="1.5rem" /></a></Avatar></li>

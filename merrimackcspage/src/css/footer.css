@@ -1,3 +1,7 @@
+#web-content {
+    min-height: 80vw;
+}
+
 .logo { 
     margin-top: 10px;
     float: left;
