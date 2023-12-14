@@ -15,18 +15,19 @@ function Navbar({ isLoggedIn, onLogout }) {
 
       {<li className="logo"><a href="/"><Image href="/" radius="md" h={50} w="auto" fit="contain" src={logo_path} style={{backgroundColor: "black"}} /></a></li>}  {/* Logo */}
       <li ><a className="active" href="/"><span>Home</span></a></li>
-      <li ><a href="/Knowledgebase"><span>Knowledgebase</span></a></li>
+      <li ><a href="/knowledgebase"><span>Knowledgebase</span></a></li>
+      <li ><a href="/members"><span>Members</span></a></li>
       <li ><a href="/user"><span>Profile</span></a></li>
     
         {isLoggedIn ? (
           // If logged in, show the logout button
-          <Button style={{ borderRadius: '20px' }} onClick={onLogout}>
+          <Button style={{ borderRadius: '20px', paddingTop: '5px'}} onClick={onLogout}>
             <h1>Logout</h1>
           </Button>
         ) : (
           // If not logged in, show the login link
           <Link to="/login">
-            <Button style={{ borderRadius: '20px' }}>
+            <Button style={{ borderRadius: '20px', paddingTop: '5px' }}>
               <h1>Login</h1>
             </Button>
           </Link>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Text, Avatar, Button } from '@mantine/core'; //Mantine UI
+import { Box, Text, Avatar, Button, Chip } from '@mantine/core'; //Mantine UI
 import { database } from '../pages/firebaseConfig';
-import { onValue, ref, set } from 'firebase/database';
+import { onValue, ref, set, update} from 'firebase/database';
 import Post from '../components/Post';
 import '../css/knowledgebase.css';
 
@@ -31,7 +31,7 @@ function ColoredBox({ children }) {
 
 function PostsList({ currentUser, firstName, userAvatar }) {
   const [posts, setPosts] = useState([]);
-
+  
   useEffect(() => {
     const fetchData = async () => {
       if (currentUser) {
@@ -87,6 +87,9 @@ function User() {
   const user = localStorage.getItem('email');
   const [firstName, setFirstName] = useState('');
   const [userAvatar, setUserAvatar] = useState('');
+  const [display, setDisplay] = useState(null);
+  const [userID, setUserID] = useState(null);
+
 //UseEffect uses Box and text elements from mantine
   useEffect(() => {
     const fetchUserData = async () => {
@@ -97,6 +100,8 @@ function User() {
           if (userData) {
             setFirstName(userData.firstName || '');
             setUserAvatar(userData.avatar || '');
+            setDisplay(userData.display === null || userData.display === undefined ? true : userData.display);
+            setUserID(snapshot.key);
           }
         });
       }
@@ -104,6 +109,19 @@ function User() {
 
     fetchUserData();
   }, [user]);
+
+  /**
+   * Called when the user presses the "Display Public" chip.
+   * @param {*} value boolean value of true or false
+   */
+  function setDisplayHandler(value) {
+
+    // Update firebase with the display value
+    update(ref(database, `users/${userID}`), {display: value});
+
+    // Update the state
+    setDisplay(value);
+  }
 
   return (
     <div className="user-page">
@@ -115,7 +133,7 @@ function User() {
     
       <Box maw={'50%'} mx="auto"> 
         {user && userAvatar && (
-          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px', justifyContent: 'space-evenly' }}>
             <Avatar
               src={userAvatar}
               alt="User Avatar"
@@ -130,7 +148,10 @@ function User() {
               <Text size="lg">Welcome, {firstName}!</Text>
               
             </div>
+
+            <Chip checked={display} onChange={() => setDisplayHandler(!display)}>Display Public</Chip>
           </div>
+          
         )}
         {user && !userAvatar && <Text>No avatar found for the user.</Text>}
         {!user && <Text>Please sign in to access this page.</Text>}
