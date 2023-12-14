@@ -124,7 +124,7 @@ function User() {
   }
 
   return (
-    <div className="user-page">
+    <div className="user-page" style={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
       <div className="title">
         <Text size="xl" style={{ borderBottom: '2px black solid' }}>
           User Page
@@ -133,7 +133,7 @@ function User() {
     
       <Box maw={'50%'} mx="auto"> 
         {user && userAvatar && (
-          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px', justifyContent: 'space-evenly' }}>
+          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px', justifyContent: 'space-evenly', marginTop: '5rem' , marginBottom: '5rem', borderRadius: '10px', backgroundColor: 'var(--mantine-color-body)', padding: '10px 10px 10px 10px'}}>
             <Avatar
               src={userAvatar}
               alt="User Avatar"
