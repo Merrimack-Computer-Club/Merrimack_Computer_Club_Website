@@ -1,0 +1,157 @@
+.logo { 
+    margin-top: 10px;
+    float: left;
+    margin-right: 10px;
+    display: block;
+}
+
+@media screen and (max-width: 900px) {
+    .logo {
+        display: none;
+    }
+}
+
+.NavBarClass {
+    margin: 0;
+    position: fixed;
+    background-image: url("../../public/background.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: 1001;
+    top: 0;
+    height: 10px;
+    width: 100%;
+}
+.NavBarClass ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.NavBarClass li {
+  margin: 0 10px;
+}
+
+/* Mobile Menu Icon Styles */
+.mobile-menu-icon {
+  display: none; /* Hide the menu icon by default */
+  cursor: pointer;
+  padding: 10px; /* Add padding for better clickability */
+}
+
+.menu-icon-line {
+  width: 25px;
+  height: 3px;
+  background-color: blue;
+  margin: 5px 0;
+}
+
+/* Media Query for Mobile */
+@media screen and (max-width: 768px) {
+  .NavBarClass ul {
+    flex-direction: column;
+    align-items: flex-start;
+    position: relative;
+  }
+
+  .NavBarClass li {
+    margin: 10px 0;
+  }
+
+  .mobile-menu-icon {
+    display: block; /* Show the menu icon on smaller screens */
+  }
+
+  /* Hide the menu items when the mobile menu is closed */
+  .NavBarClass ul:not(.mobile-menu-open) li:not(.mobile-menu-icon) {
+    display: none;
+  }
+
+  /* Show the menu items when the mobile menu is open */
+  .NavBarClass ul.mobile-menu-open li {
+    display: block;
+  }
+}
+body {
+    margin: 0;
+    padding-top: 50px;
+}
+
+/* Nav bar reference: https://www.w3schools.com/css/css_navbar_horizontal.asp */
+ul {
+    z-index: 1000;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: white;
+    position: fixed;
+    top: 10px;
+    width: 100%;
+    padding-bottom: 5px;
+    justify-content: flex-start;
+}
+
+ul Button {
+    margin-right: 20px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    
+    float: right;
+    font-family: var(--poppinsBold);
+    color: white;
+}
+
+ul Button h1 {
+    font-size: 1.25rem;
+    padding: 5px;
+}
+
+li {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    float: left;
+}
+
+li a {
+    display: block;
+    color: black;
+    font-family: var(--poppinsBold);
+    font-size: 1.25rem;
+    text-align: center;
+    padding: 0px 15px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+li a span:hover {
+    border-bottom: 5px blue solid;
+}
+
+
+@media screen and (max-width: 800px) {
+    li a {
+        font-size: 1rem;
+        margin-top: 5px;
+        padding: 0px 10px;
+    }
+
+    ul Button h1 {
+        font-size: 1rem;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    li a {
+        font-size: .75rem;
+        padding: 0px 5px;
+    }
+
+    ul Button h1 {
+        font-size: .75rem;
+        padding: 0px;
+    }
+}
