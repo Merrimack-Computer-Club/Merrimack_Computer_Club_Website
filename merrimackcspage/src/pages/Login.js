@@ -45,6 +45,7 @@ function Login({ setLoggedIn }) {
         lastName: lastName,
         user_description: user_description || defaultUserDescription,
         avatar: avatar || defaultAvatar,
+        display: true,
       });
   
       console.log("User added to Firebase Realtime Database");

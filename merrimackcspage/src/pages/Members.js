@@ -18,7 +18,7 @@ function Members(props) {
         // Loop through each child and add it to temp
         snapshot.forEach(child => {
           const key = child.key;
-          const display = child.display;
+          const display = child.toJSON().display;
           if(display === undefined || display === null || display === true) { // Probable should changed this to if a display is not undefined and not null and display: true
             var childObj = child.toJSON();
             childObj['key'] = key; // Get an append the user key to the obj

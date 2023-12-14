@@ -11,14 +11,14 @@ function Member({id, first_name, last_name, email, description, avatar_img}) {
             {/* Member Container: */}
             <Container className="member-container">
             <Card shadow="md" radius="md" withBorder className='content-container-inner' style={{padding: "25px 25px 25px 25px"}}>
-                <Card.Section>
-                    <Avatar size={90} src={avatar_img} alt="user's profile picture." color="indigo"/>
+                <Card.Section style={{display: "flex", justifyContent: "center"}}>
+                    <Avatar size={90} src={avatar_img} alt="user's profile picture." color="red"/>
                 </Card.Section>
 
                 <Card.Section>
                     <Group justify="space-between" mt="md" mb="xs">
                     <Text fw={500}>{`${first_name} ${last_name}`}</Text>
-                    <Badge color="pink">member</Badge>
+                    <Badge color="cyan">member</Badge>
                     </Group>
                 </Card.Section>
 
