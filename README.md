@@ -46,7 +46,7 @@ Welcome to the Merrimack College Knowledgebase React Project! This project aims 
 
 2. **Open your browser and navigate to [http://localhost:5000](http://localhost:5000).**
 
-3. Or, Navigate to our [Firebase Hosted Webpage]()
+3. Or, Navigate to our [Firebase Hosted Webpage](https://web-development-final-7dd3e.web.app/)
 
 ## Build Firebase
 
