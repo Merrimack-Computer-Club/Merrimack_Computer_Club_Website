@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Text, Avatar, Button, Chip } from '@mantine/core'; // Mantine UI
+import { Box, Text, Avatar, Button, Chip } from '@mantine/core'; //Mantine UI
 import { database } from '../pages/firebaseConfig';
-import { onValue, ref, set, update } from 'firebase/database';
+import { onValue, ref, set, update} from 'firebase/database';
 import Post from '../components/Post';
 import '../css/knowledgebase.css';
 import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import 'react-quill/dist/quill.snow.css'; 
+import { Container } from '@mantine/core';
 
 function getRandomColor() {
   const letters = '0123456789ABCDEF';
@@ -25,7 +26,7 @@ function ColoredBox({ children }) {
     minWidth: '60vw',
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
+    alignItems: 'center'
   };
 
   return <div style={boxStyle}>{children}</div>;
@@ -33,7 +34,7 @@ function ColoredBox({ children }) {
 
 function PostsList({ currentUser, firstName, userAvatar }) {
   const [posts, setPosts] = useState([]);
-
+  
   useEffect(() => {
     const fetchData = async () => {
       if (currentUser) {
@@ -57,7 +58,7 @@ function PostsList({ currentUser, firstName, userAvatar }) {
     <div className="posts-list">
       {firstName && (
         <Text size="lg" style={{ marginBottom: '10px' }}>
-          See and edit all of your posts below
+           See and edit all of your posts below
         </Text>
       )}
 
@@ -93,32 +94,34 @@ function User() {
   const [userID, setUserID] = useState(null);
   const [userDescription, setUserDescription] = useState('');
   const [isEditing, setIsEditing] = useState(false);
-
   function setDisplayHandler(value) {
     update(ref(database, `users/${userID}`), { display: value });
     setDisplay(value);
   }
+//UseEffect uses Box and text elements from mantine
+useEffect(() => {
+  const fetchUserData = async () => {
+    if (user) {
+      const userRef = ref(database, `users/${user.split('@')[0].replace(/\./g, ',')}`);
+      onValue(userRef, (snapshot) => {
+        const userData = snapshot.val();
+        if (userData) {
+          setFirstName(userData.firstName || '');
+          setUserAvatar(userData.avatar || '');
+          setDisplay(userData.display === null || userData.display === undefined ? true : userData.display);
+          setUserID(snapshot.key);
+          setUserDescription(userData.user_description || '');
+        }
+      });
+    }
+  };
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      if (user) {
-        const userRef = ref(database, `users/${user.split('@')[0].replace(/\./g, ',')}`);
-        onValue(userRef, (snapshot) => {
-          const userData = snapshot.val();
-          if (userData) {
-            setFirstName(userData.firstName || '');
-            setUserAvatar(userData.avatar || '');
-            setDisplay(userData.display === null || userData.display === undefined ? true : userData.display);
-            setUserID(snapshot.key);
-            setUserDescription(userData.user_description || '');
-          }
-        });
-      }
-    };
-
-    fetchUserData();
-  }, [user]);
-
+  fetchUserData();
+}, [user]);
+  /**
+   * Called when the user presses the "Display Public" chip.
+   * @param {*} value boolean value of true or false
+   */
   function setDisplayHandler(value) {
     update(ref(database, `users/${userID}`), { display: value });
     setDisplay(value);
@@ -134,8 +137,8 @@ function User() {
   }
 
   return (
-    <div className="user-page" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-      <Box maxWidth={{ md: '50%', sm: '100%' }} mx="auto">
+    <Container size="sm">
+      <div className="user-page">
         {user && userAvatar && (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '10px', justifyContent: 'space-evenly', marginTop: '5rem', marginBottom: '5rem', borderRadius: '10px', backgroundColor: 'var(--mantine-color-body)', padding: '10px' }}>
             <Avatar
@@ -157,42 +160,6 @@ function User() {
                   value={userDescription}
                   onChange={(value) => setUserDescription(value)}
                   placeholder="Enter your description"
-                  modules={{
-                    toolbar: [
-                      ['bold', 'italic', 'underline', 'strike'],
-                      ['blockquote', 'code-block'],
-                      [{ header: 1 }, { header: 2 }],
-                      [{ list: 'ordered' }, { list: 'bullet' }],
-                      [{ script: 'sub' }, { script: 'super' }],
-                      [{ indent: '-1' }, { indent: '+1' }],
-                      [{ direction: 'rtl' }],
-                      [{ size: ['small', false, 'large', 'huge'] }],
-                      [{ header: [1, 2, 3, 4, 5, 6, false] }],
-                      [{ color: [] }, { background: [] }],
-                      [{ font: [] }],
-                      [{ align: [] }],
-                      ['clean'],
-                    ],
-                    keyboard: {
-                      bindings: {
-                        enter: {
-                          key: 13,
-                          handler: function () {
-                            return true;
-                          },
-                        },
-                      },
-                    },
-                  }}
-                  formats={[
-                    'header', 'font', 'size',
-                    'bold', 'italic', 'underline', 'strike', 'blockquote',
-                    'list', 'bullet', 'indent',
-                    'link', 'image', 'color', 'code-block',
-                  ]}
-                  bounds={'.app'}
-                  readOnly={false}
-                  theme="snow"
                 />
               ) : (
                 <div dangerouslySetInnerHTML={{ __html: userDescription }} />
@@ -219,8 +186,8 @@ function User() {
 
         {/* PostsList component */}
         {user && userAvatar && <PostsList currentUser={user} firstName={firstName} userAvatar={userAvatar} />}
-      </Box>
-    </div>
+      </div>
+    </Container>
   );
 }
 
