@@ -20,7 +20,7 @@ Welcome to the Merrimack College Knowledgebase React Project! This project aims 
 
 2. **Navigate to the project directory:**
     ```bash
-    cd merrimackcspage
+    cd elguezabal_brown_vanhecke_3950_final
     ```
 
 3. **Install dependencies:**
@@ -47,6 +47,18 @@ Welcome to the Merrimack College Knowledgebase React Project! This project aims 
 2. **Open your browser and navigate to [http://localhost:5000](http://localhost:5000).**
 
 3. Or, Navigate to our [Firebase Hosted Webpage]()
+
+## Build Firebase
+
+1. **Build React project**
+```bash
+npm run build
+```
+
+2. **Deploy to Firebase**
+```bash
+firebase deploy
+```
 
 ## Features
 
