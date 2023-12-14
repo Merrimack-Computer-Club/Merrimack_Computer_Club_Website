@@ -1,0 +1,20 @@
+.login-container {
+    margin-top: 10rem;
+    background-color: lightblue;
+    border-radius: 15px;
+    padding: 25px 25px 25px 25px;
+    align-content: center;
+    text-align: center;
+    flex-wrap: wrap;
+}
+
+.container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+body {
+    background-color: rgba(190, 190, 190, 0.25);
+}
