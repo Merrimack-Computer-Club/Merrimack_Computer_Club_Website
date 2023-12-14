@@ -34,7 +34,25 @@ function Knowledgebase(props) {
    * @param {*} value 
    */
   function onSearchSubmit(value) {
+     // Remove searches if value is null or undefined
+     if(value === null || value === undefined || value.trim().length === 0) {
+        setDisplayedPosts([]);
+        return;
+     }
+
      setDisplayedPosts(posts.filter(n=> n.title !== null && n.title !== undefined && n.title === value));
+  }
+
+  /**
+   * Called when the value of Autocomplete for search is called
+   * @param {*} value 
+   */
+  function setSearchValue(value) {
+      setSearch(value);
+      // Remove searches if value is null or undefined
+      if(value === null || value === undefined || value.trim().length === 0) {
+        setDisplayedPosts([]);
+      }
   }
 
   return (
@@ -45,14 +63,14 @@ function Knowledgebase(props) {
       <div className='search'>
         <Autocomplete label="Search" onOptionSubmit={onSearchSubmit} 
         data={posts.map(n => (n.title === null || n.title === undefined) ? null : n.title).filter((value, index, array) => array.indexOf(value) === index)} 
-        value={search} onChange={setSearch} 
+        value={search} onChange={setSearchValue} 
         comboboxProps={{ shadow: 'md', transitionProps: { transition: 'pop', duration: 200 } }}/>
       </div>
 
       {/* Display a list of posts from displayedPosts */}
       <div className='posts' style={{ paddingTop: '60px', height: 'fit-content' }}>
         {displayedPosts.map((n) => {     
-           return (<Post key={n.title} userID={n.maintainer} userEmail={n.maintainer_email} createTime={n.creationTime} updateTime={n.updateTime} information={n.information} title={n.title} tags={n.tags} resources={n.resources} comments={n.comments} />  
+           return (<Post key={n.title} userID={n.maintainer} userEmail={n.maintainer_email} createTime={n.creationTime} updateTime={n.updateTime} information={n.information} title={n.title} tags={n.tags} resources={n.resources} in_comments={n.in_comments} />  
            ) 
         })}
       </div>

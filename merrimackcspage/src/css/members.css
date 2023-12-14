@@ -1,0 +1,11 @@
+.members {
+    display: flex;
+    padding-top: 10rem;
+    align-items: center;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.content-container-inner {
+    border: 10px 10px 10px 10px;
+}

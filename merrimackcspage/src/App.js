@@ -3,11 +3,13 @@ import { MantineProvider } from "@mantine/core";
 import '@mantine/core/styles.css';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer"
 
 import Home from './pages/Home'
 import Knowledgebase from './pages/Knowledgebase'
 import Login from './pages/Login'
 import User from './pages/User'
+import Members from './pages/Members'
 
 import {
   BrowserRouter as Router,
@@ -48,15 +50,16 @@ function App() {
       <MantineProvider defaultColorScheme="light">
         <Router>
           <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
+          <div id='web-content'>
           <Routes>
             <Route exact path="/" element={<Home />} />
-            <Route path="/Knowledgebase" element={<Knowledgebase />} />
-            <Route
-              path="/login"
-              element={<Login setLoggedIn={setLoggedIn} />}
-            />
+            <Route path="/knowledgebase" element={<Knowledgebase />} />
+            <Route path="/login" element={<Login setLoggedIn={setLoggedIn} />}/>
             <Route path="/user" element={<User />} />
+            <Route path="/members" element={<Members />} />
           </Routes>
+          </div>
+          <Footer/>
         </Router>
       </MantineProvider>
     </GoogleOAuthProvider>

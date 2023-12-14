@@ -3,8 +3,6 @@
 }
 
 .post {
-    margin-left: 10%;
-    margin-right: 10%;
     display: flex;
     justify-content: left;
     align-items: center;
@@ -51,6 +49,10 @@
     flex-wrap: wrap;
 }
 
+.post-container {
+    max-width: 75%;
+}
+
 .search {
     display: flex;
     flex-direction: column;
@@ -76,4 +78,26 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.content {
+    min-width: 50vw;
+}
+
+.comments {
+    display: flex;
+    flex-direction: column;
+}
+
+.commentsInput {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    padding: 10px 10px 10px 10px;
+}
+
+@media screen and (max-width: 800px) {
+   .post-container {
+    max-width: 100%;
+   }
 }

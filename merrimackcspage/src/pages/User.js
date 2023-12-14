@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Text, Avatar, Button } from '@mantine/core';
+import { Box, Text, Avatar, Button, Chip } from '@mantine/core'; //Mantine UI
 import { database } from '../pages/firebaseConfig';
-import { onValue, ref, set } from 'firebase/database';
+import { onValue, ref, set, update} from 'firebase/database';
 import Post from '../components/Post';
 import '../css/knowledgebase.css';
 
@@ -16,10 +16,14 @@ function getRandomColor() {
 
 function ColoredBox({ children }) {
   const boxStyle = {
-    backgroundColor: 'rgba(255, 255, 255, 0.795)',
+    backgroundColor: getRandomColor(),
     padding: '10px',
-    margin: '10px',
+    marginTop: '10px',
     borderRadius: '8px',
+    minWidth: '60vw',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
   };
 
   return <div style={boxStyle}>{children}</div>;
@@ -27,7 +31,7 @@ function ColoredBox({ children }) {
 
 function PostsList({ currentUser, firstName, userAvatar }) {
   const [posts, setPosts] = useState([]);
-
+  
   useEffect(() => {
     const fetchData = async () => {
       if (currentUser) {
@@ -51,7 +55,7 @@ function PostsList({ currentUser, firstName, userAvatar }) {
     <div className="posts-list">
       {firstName && (
         <Text size="lg" style={{ marginBottom: '10px' }}>
-          Welcome, {firstName}! See and edit all of your posts below
+           See and edit all of your posts below
         </Text>
       )}
 
@@ -59,6 +63,7 @@ function PostsList({ currentUser, firstName, userAvatar }) {
         posts.map((post) => (
           <ColoredBox key={post.id}>
             <Post
+              key={post.title}
               userID={post.maintainer}
               userEmail={post.maintainer_email}
               createTime={post.creationTime}
@@ -67,7 +72,7 @@ function PostsList({ currentUser, firstName, userAvatar }) {
               title={post.title}
               tags={post.tags}
               resources={post.resources}
-              comments={post.comments}
+              in_comments={post.in_comments}
             />
           </ColoredBox>
         ))
@@ -82,7 +87,10 @@ function User() {
   const user = localStorage.getItem('email');
   const [firstName, setFirstName] = useState('');
   const [userAvatar, setUserAvatar] = useState('');
+  const [display, setDisplay] = useState(null);
+  const [userID, setUserID] = useState(null);
 
+//UseEffect uses Box and text elements from mantine
   useEffect(() => {
     const fetchUserData = async () => {
       if (user) {
@@ -92,6 +100,8 @@ function User() {
           if (userData) {
             setFirstName(userData.firstName || '');
             setUserAvatar(userData.avatar || '');
+            setDisplay(userData.display === null || userData.display === undefined ? true : userData.display);
+            setUserID(snapshot.key);
           }
         });
       }
@@ -100,17 +110,30 @@ function User() {
     fetchUserData();
   }, [user]);
 
+  /**
+   * Called when the user presses the "Display Public" chip.
+   * @param {*} value boolean value of true or false
+   */
+  function setDisplayHandler(value) {
+
+    // Update firebase with the display value
+    update(ref(database, `users/${userID}`), {display: value});
+
+    // Update the state
+    setDisplay(value);
+  }
+
   return (
-    <div className="user-page">
+    <div className="user-page" style={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
       <div className="title">
         <Text size="xl" style={{ borderBottom: '2px black solid' }}>
           User Page
         </Text>
       </div>
-
-      <Box maw={'50%'} mx="auto">
+    
+      <Box maw={'50%'} mx="auto"> 
         {user && userAvatar && (
-          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px', justifyContent: 'space-evenly', marginTop: '5rem' , marginBottom: '5rem', borderRadius: '10px', backgroundColor: 'var(--mantine-color-body)', padding: '10px 10px 10px 10px'}}>
             <Avatar
               src={userAvatar}
               alt="User Avatar"
@@ -123,9 +146,12 @@ function User() {
             />
             <div style={{ marginLeft: '20px' }}>
               <Text size="lg">Welcome, {firstName}!</Text>
-              <Text>No description available</Text>
+              
             </div>
+
+            <Chip checked={display} onChange={() => setDisplayHandler(!display)}>Display Public</Chip>
           </div>
+          
         )}
         {user && !userAvatar && <Text>No avatar found for the user.</Text>}
         {!user && <Text>Please sign in to access this page.</Text>}

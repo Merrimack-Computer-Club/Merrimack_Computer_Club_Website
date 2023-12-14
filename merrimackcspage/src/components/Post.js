@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useReducer } from "react";
 import '../css/knowledgebase.css';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { Text, Button, TagsInput, Collapse, Flex } from '@mantine/core';
+import { Text, Button, TagsInput, Collapse, TextInput, Divider } from '@mantine/core';
 import { app, database } from '../pages/firebaseConfig';
-import { getDatabase, ref, onValue, push, child, update, set, remove } from "firebase/database";
+import { getDatabase, ref, onValue, push, child, update, get, set, remove} from "firebase/database";
+import Comment from "./Comment";
 
 /**
  * @param {*} postID Represents the UUID for this post
@@ -20,14 +21,19 @@ import { getDatabase, ref, onValue, push, child, update, set, remove } from "fir
  * 
  * @returns 
  */
-function Post({key, userID, userEmail, createTime, updateTime, information, title, tags, resources, comments }) {
+function Post({ userID, userEmail, createTime, updateTime, information, title, tags, resources, in_comments }) {
 
     const [value, setValue] = useState(information);
     const [editing, setEditing] = useState(false);
     const [resourcesOpened, setResources] = useState(false);
     const [resourceText, setResourceText] = useState("");
+    const [comment, setComment] = useState('');;
+    const [comments, setComments] = useState(in_comments);
+    const [, forceUpdate] = useReducer(x => x + 1, 0);
+
 
     useEffect(() => {
+
        // Determine if we have resources
        var worked = resources !== null && resources !== undefined;
        var temp = "";
@@ -45,7 +51,7 @@ function Post({key, userID, userEmail, createTime, updateTime, information, titl
     function saveClicked() {
 
         // Update the reference in the database
-        update(ref(database, `knowledgebase/${title}`), {information: value});
+        update(ref(database, `knowledgebase/${title}`), {information: value, updateTime: Date.now()});
 
         setEditing(false);
     }
@@ -68,6 +74,57 @@ function Post({key, userID, userEmail, createTime, updateTime, information, titl
         return editing;
     }
 
+    function getEmail() {
+        return localStorage.getItem("email");
+    }
+
+    function getUserID() {
+        return localStorage.getItem("userid");
+    }
+
+    function hasEmail() {
+        return getEmail() != null && getEmail() != undefined;
+    }
+
+    function hasUserID() {
+        return getUserID() != null && getUserID() != undefined;
+    }
+
+    /**
+     * Called when this comment is submitted, update this ref in firebase
+     */
+    function submitComment() {
+        // Assure a comment exists.
+        if(comment === null || comment === undefined || comment.trim().length == 0) {
+            return;
+        }
+
+        try {
+            const db = database;
+            
+            // Get the comments array
+            var temp = (comments !== undefined && comments !== null) ? comments : {};
+            
+            // Construct the comment
+            const commentTemp = {
+                commenter: getUserID(),
+                commenter_email: getEmail(),
+                comment: comment,
+                creationTime: Date.now()
+            }
+
+            temp[Object.keys(temp).length == 0 ? 0 : (Object.keys(temp).length)] = commentTemp;
+            update(ref(database, `knowledgebase/${title}`), {in_comments: temp});
+
+            setComments(temp);
+            setComment('');
+
+        } catch(error) {
+            console.log(error);
+        }
+    }
+
+
     // Function determines if the user can edit the post
     function canEdit() {
         //console.log(value);
@@ -77,6 +134,27 @@ function Post({key, userID, userEmail, createTime, updateTime, information, titl
             return true;
         }
         return false;
+    }
+
+    /**
+     * Removes this comment from the post
+     */
+    function removeComment(idx) {
+        remove(ref(database, `knowledgebase/${title}/in_comments/${idx}`)).then(() => {
+            console.log(`Comment ${idx} removed`);
+
+            // Remove the item from the parents comments state.
+            setComments(current => {
+                delete current[idx];
+                return current;
+            });
+
+            // Force a render of this Post
+            forceUpdate();
+
+
+        });
+        
     }
 
     function hasResources() {
@@ -110,8 +188,18 @@ function Post({key, userID, userEmail, createTime, updateTime, information, titl
 
   return (
 
-    <div className="post" id={key}>
+    <div className="post" id={title}>
         
+        {/* If not currently editing, but able to edit. Add the Edit button */}
+        {canEdit() &&
+            <div className="edit-options">
+                <div style={{display: "flex", justifyContent: "center", alignContent: "center", margin: "5px 5px 5px 5px"}} >
+                    <Button onClick={editClicked} variant="gradient" gradient={{ from: 'blue', to: 'cyan', deg: 0 }} size="sm">Edit</Button>
+                </div>
+                <Divider my="md" /> {/* Divider for comment section */}
+            </div>   
+        }
+
         <div className="title">
             <Text size="xl" style={{borderBottom: "2px black solid"}}>{title}</Text>
         </div>
@@ -152,16 +240,25 @@ function Post({key, userID, userEmail, createTime, updateTime, information, titl
                 </div>   
                 }
 
-            {/* If not currently editing, but able to edit. Add the Edit button */}
-            {canEdit() &&
-                <div style={{display: "flex", justifyContent: "center", alignContent: "center", margin: "5px 5px 5px 5px"}} >
-                    <Button onClick={editClicked} variant="gradient" gradient={{ from: 'blue', to: 'cyan', deg: 0 }} size="sm">Edit</Button>
+            {/* Display comments if logged in*/}
+            {hasEmail() && hasUserID() &&
+                <div className="comments">
+                    <Divider my="md" /> {/* Divider for comment section */}
+                    <div className="commentsInput">
+                        <TextInput label="Create comment" value={comment} onChange={(event) => setComment(event.currentTarget.value)} style={{marginRight: "10px", minWidth: "90%"}}/>
+                        <Button onClick={submitComment} variant="gradient" gradient={{ from: 'blue', to: 'green', deg: 0 }} size="sm" style={{marginRight: "10px"}}>Submit</Button>
+                    </div>
+
+                    <div className="comment-list">
+                        {/* Loop over each comment, and create a new comment component for it */}
+                        {comments !== null && comments !== undefined && Object.keys(comments).map(n => {
+                            return <Comment key={n} comment_id={n} comment={comments[n].comment} commenter={comments[n].commenter} commenter_email={comments[n].commenter_email} createTime={comments[n].creationTime} removeComment={removeComment}></Comment>
+                        })}
+                    </div>
                 </div>
             }
             </div>
         }
-
-        
 
 
         </div>

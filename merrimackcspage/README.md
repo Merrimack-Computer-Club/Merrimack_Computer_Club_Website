@@ -1,3 +1,19 @@
+
+This application runs on local host
+- to run please first cd into merrmack cs page
+-  then npm install
+- finally do npm start
+
+for extra credit we 
+- Utilized Sessions
+- Site utilizes Mantine a framework not discussed in class
+
+
+
+
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
