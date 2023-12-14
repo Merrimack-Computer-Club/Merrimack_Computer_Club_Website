@@ -125,7 +125,7 @@ function User() {
 
   return (
     <div className="user-page" style={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
-      <div className="title">
+      <div className="title" style={{marginTop: '7rem'}}>
         <Text size="xl" style={{ borderBottom: '2px black solid' }}>
           User Page
         </Text>
