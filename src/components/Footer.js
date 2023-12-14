@@ -8,7 +8,7 @@ import { IconBrandGithub, IconBrandLinkedin, IconBrandDiscord } from '@tabler/ic
 function Footer() {
   
   const github_url = 'https://github.com/Merrimack-Computer-Club';
-  const linkedin_url = '';
+  const linkedin_url = 'https://www.linkedin.com/showcase/mc-school-engineering-and-computational-sciences/';
   const discord_url = 'https://discord.gg/3pn8GH9BXP';
 
   return (
