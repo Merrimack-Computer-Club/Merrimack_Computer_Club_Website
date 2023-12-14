@@ -9,7 +9,7 @@ function Navbar({ isLoggedIn, onLogout }) {
   const logo_path = './merrimack-computer-club-removebg-preview.png';
 
   return (
-    <div className='NavBarClass'>
+    <header className='NavBarClass'>
 
     <ul>
 
@@ -33,7 +33,7 @@ function Navbar({ isLoggedIn, onLogout }) {
           </Link>
         )}
       </ul>
-    </div>
+    </header>
   );
 }
 
