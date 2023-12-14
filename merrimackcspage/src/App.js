@@ -3,6 +3,7 @@ import { MantineProvider } from "@mantine/core";
 import '@mantine/core/styles.css';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer"
 
 import Home from './pages/Home'
 import Knowledgebase from './pages/Knowledgebase'
@@ -56,6 +57,7 @@ function App() {
             <Route path="/user" element={<User />} />
             <Route path="/members" element={<Members />} />
           </Routes>
+          <Footer/>
         </Router>
       </MantineProvider>
     </GoogleOAuthProvider>

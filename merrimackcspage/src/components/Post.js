@@ -245,7 +245,7 @@ function Post({ userID, userEmail, createTime, updateTime, information, title, t
                 <div className="comments">
                     <Divider my="md" /> {/* Divider for comment section */}
                     <div className="commentsInput">
-                        <TextInput label="Create comment" value={comment} onChange={(event) => setComment(event.currentTarget.value)} style={{marginRight: "10px", minWidth: "75%"}}/>
+                        <TextInput label="Create comment" value={comment} onChange={(event) => setComment(event.currentTarget.value)} style={{marginRight: "10px", minWidth: "90%"}}/>
                         <Button onClick={submitComment} variant="gradient" gradient={{ from: 'blue', to: 'green', deg: 0 }} size="sm" style={{marginRight: "10px"}}>Submit</Button>
                     </div>
 
