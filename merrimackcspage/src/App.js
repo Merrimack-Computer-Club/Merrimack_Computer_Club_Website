@@ -50,6 +50,7 @@ function App() {
       <MantineProvider defaultColorScheme="light">
         <Router>
           <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
+          <div id='web-content'>
           <Routes>
             <Route exact path="/" element={<Home />} />
             <Route path="/knowledgebase" element={<Knowledgebase />} />
@@ -57,6 +58,7 @@ function App() {
             <Route path="/user" element={<User />} />
             <Route path="/members" element={<Members />} />
           </Routes>
+          </div>
           <Footer/>
         </Router>
       </MantineProvider>

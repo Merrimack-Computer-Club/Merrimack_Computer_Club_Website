@@ -12,7 +12,7 @@ function Footer() {
   const discord_url = 'https://discord.gg/3pn8GH9BXP';
 
   return (
-    <div className='Footer'>
+    <footer className='Footer'>
       <ul className='footer-ul'>
 
           <li><Avatar><a href={github_url}><IconBrandGithub size="1.5rem" /></a></Avatar></li>
@@ -20,7 +20,7 @@ function Footer() {
           <li><Avatar><a href={discord_url}><IconBrandDiscord size="1.5rem" /></a></Avatar></li>
 
       </ul>
-    </div>
+    </footer>
   );
 }
 
