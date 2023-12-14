@@ -15,12 +15,12 @@ Welcome to the Merrimack College Knowledgebase React Project! This project aims 
 
 1. **Clone the repository:**
     ```bash
-    git clone https://github.com/your-username/merrimack-knowledgebase-react.git
+    git clone https://github.com/Merrimack-Computer-Club/elguezabal_brown_vanhecke_3950_final
     ```
 
 2. **Navigate to the project directory:**
     ```bash
-    cd merrimack-knowledgebase-react
+    cd merrimackcspage
     ```
 
 3. **Install dependencies:**
@@ -32,11 +32,10 @@ Welcome to the Merrimack College Knowledgebase React Project! This project aims 
 
 1. Create a `.env` file in the project root.
 
-2. Add the following environment variables:
-    ```dotenv
-    REACT_APP_API_URL=your-api-url
-    REACT_APP_GOOGLE_MAPS_API_KEY=your-google-maps-api-key
-    ```
+3. Put the following in the `.env` file.
+   ```bash
+    PORT=5000
+   ```
 
 ## Usage
 
@@ -45,13 +44,15 @@ Welcome to the Merrimack College Knowledgebase React Project! This project aims 
     npm start
     ```
 
-2. **Open your browser and navigate to [http://localhost:3000](http://localhost:3000).**
+2. **Open your browser and navigate to [http://localhost:5000](http://localhost:5000).**
+
+3. Or, Navigate to our [Firebase Hosted Webpage]()
 
 ## Features
 
-- Explore and contribute to the knowledgebase.
+- Explore and contribute to the knowledge base.
 - Create, edit, and delete posts.
-- Engage with the community through comments and voting.
+- Engage with the community through comments.
 
 ## Contributing
 
