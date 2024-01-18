@@ -80,7 +80,7 @@ function Login({ setLoggedIn }) {
     const avatar = decode.picture || '';
     // Trigger the addUserToFirebase function with the Google avatar
     // Trigger the addUserToFirebase function with the Google avatar
-addUserToFirebase(decode.email, firstName, lastName, "", avatar);
+    addUserToFirebase(decode.email, firstName, lastName, "", avatar);
 
   
     // Update the login status in the App component
