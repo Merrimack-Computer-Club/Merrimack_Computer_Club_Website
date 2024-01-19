@@ -15,7 +15,7 @@ Welcome to the Merrimack College Knowledgebase React Project! This project aims 
 
 1. **Clone the repository:**
     ```bash
-    git clone https://github.com/Merrimack-Computer-Club/elguezabal_brown_vanhecke_3950_final
+    git clone https://github.com/Merrimack-Computer-Club/Merrimack_Computer_Club_Website
     ```
 
 2. **Navigate to the project directory:**
