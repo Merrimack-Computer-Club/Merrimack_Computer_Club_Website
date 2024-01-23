@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import '../css/stock-video.css';
 
+
+
 function StockVideo() {
 
     const [current_video, setCurrentVideo] = useState(0);
-    const [current_video_Duraition, setCurrentVideoDuration] = useState(0);
     const video_srcs = [
         '/stock_videos/merrimack-stock-1.mp4',
         '/stock_videos/merrimack-stock-2.mp4'
     ];
 
-    
     useEffect(() => {
         
     }, [current_video, video_srcs.length]);
@@ -28,8 +28,6 @@ function StockVideo() {
                 return c + 1;
             }
         });
-
-        console.log(current_video);
     }
 
   return (
