@@ -125,7 +125,7 @@ function Home() {
 
         {/* Mission Statement: */}
         <Container className="content-container">
-          <Card shadow="sm" radius="md" withBorder className='content-container-inner'>
+          <Card shadow="sm" radius="md" withBorder className='content-container-inner shadow-xl'>
             <Card.Section>
               <Image
                 src={image_2_path}

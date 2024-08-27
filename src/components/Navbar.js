@@ -33,6 +33,7 @@ function Navbar({ isLoggedIn, onLogout }) {
         <li><a href="/knowledgebase"><span>Knowledgebase</span></a></li>
         <li><a href="/members"><span>Members</span></a></li>
         <li><a href="/user"><span>Profile</span></a></li>
+        <li><a href="https://forms.gle/caSkCiSkbUe2RaCG9"><span>Interest</span></a></li>
         {isLoggedIn ? (
           <li>
             <Button style={{ borderRadius: '20px', paddingTop: '5px' }} onClick={onLogout}>
