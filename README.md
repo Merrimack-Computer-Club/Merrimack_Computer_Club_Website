@@ -36,10 +36,14 @@ The Merrimack College Computer Club Knowledgebase is a full-stack web applicatio
 1. **Clone the repository:**
     ```bash
     git clone https://github.com/Merrimack-Computer-Club/Merrimack_Computer_Club_Website
+    ```
+
+2. **Navigate to the project directory:**
+    ```bash
     cd Merrimack_Computer_Club_Website
     ```
 
-2. **Install dependencies:**
+3. **Install dependencies:**
     ```bash
     npm install
     ```
