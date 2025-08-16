@@ -1,15 +1,35 @@
-# Merrimack College Knowledgebase React Project
+# Merrimack College Computer Club Knowledgebase
 
-## Introduction
+## Overview
 
-Welcome to the Merrimack College Knowledgebase React Project! This project aims to provide an interactive and user-friendly platform for the Merrimack College community to share and access valuable information through a knowledgebase system.
+The Merrimack College Computer Club Knowledgebase is a full-stack web application built with React, Mantine UI, Firebase, and Bootstrap. It provides a collaborative platform for club members to share knowledge, create posts, comment, and connect with peers.
+
+## Features
+
+- **User Authentication:** Google OAuth login restricted to Merrimack College email addresses.
+- **Knowledgebase:** Create, edit, delete, and search posts with rich text, tags, and resources.
+- **Comments:** Engage with posts through threaded comments.
+- **Member Directory:** View public profiles of club members.
+- **Responsive Design:** Optimized for desktop and mobile devices.
+- **Firebase Integration:** Real-time database for posts, users, and comments.
+- **Media Support:** Stock videos and images for enhanced visual experience.
+
+## Tech Stack
+
+- **Frontend:** React, Mantine UI, Bootstrap, React Quill
+- **Backend:** Firebase Realtime Database, Firebase Hosting
+- **Authentication:** Google OAuth via `@react-oauth/google`
+- **Icons:** Tabler Icons
+- **Styling:** CSS Modules, Mantine, Bootstrap
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js and npm installed on your machine.
-- Access to the Merrimack College Knowledgebase API.
+- Node.js (v16+ recommended)
+- npm (v8+ recommended)
+- [Firebase CLI](https://firebase.google.com/docs/cli) (for deployment)
+- Access to Merrimack College Google account for login
 
 ### Installation
 
@@ -30,57 +50,80 @@ Welcome to the Merrimack College Knowledgebase React Project! This project aims 
 
 ### Configuration
 
-1. Create a `.env` file in the project root.
+1. **Environment Variables:**
+    - Create a `.env` file in the project root:
+      ```bash
+      PORT=5000
+      ```
+    - (Optional) Add other environment variables as needed for local development.
 
-3. Put the following in the `.env` file.
-   ```bash
-    PORT=5000
-   ```
+2. **Firebase Setup:**
+    - The project is pre-configured for the Merrimack Computer Club Firebase project.
+    - If you wish to use your own Firebase project, update the configuration in [`src/pages/firebaseConfig.js`](src/pages/firebaseConfig.js).
 
-## Usage
+### Usage
 
 1. **Start the development server:**
     ```bash
     npm start
     ```
+    - The app will run at [http://localhost:5000](http://localhost:5000) (or the port specified in `.env`).
 
-2. **Open your browser and navigate to [http://localhost:5000](http://localhost:5000).**
+2. **Access the app:**
+    - Open your browser and navigate to [http://localhost:5000](http://localhost:5000).
+    - Or visit the [Firebase Hosted Webpage](https://web-development-final-7dd3e.web.app/).
 
-3. Or, Navigate to our [Firebase Hosted Webpage](https://web-development-final-7dd3e.web.app/)
+### Build & Deploy
 
-## Build Firebase
+1. **Build the React project:**
+    ```bash
+    npm run build
+    ```
 
-1. **Build React project**
-```bash
-npm run build
+2. **Deploy to Firebase Hosting:**
+    ```bash
+    firebase deploy
+    ```
+    - See [`firebase.json`](firebase.json) for hosting configuration.
+
+## Project Structure
+
+```
+├── public/
+│   ├── index.html
+│   ├── favicon.ico
+│   └── ...
+├── src/
+│   ├── components/
+│   ├── pages/
+│   ├── css/
+│   ├── App.js
+│   ├── index.js
+│   └── ...
+├── .env
+├── package.json
+├── firebase.json
+└── README.md
 ```
 
-2. **Deploy to Firebase**
-```bash
-firebase deploy
-```
+## Contribution Guidelines
 
-## Features
-
-- Explore and contribute to the knowledge base.
-- Create, edit, and delete posts.
-- Engage with the community through comments.
-
-## Contributing
-
-1. Fork the repository.
-2. Create a new branch for your feature or bug fix.
-3. Commit your changes and push to your fork.
-4. Submit a pull request.
+1. **Fork the repository** and create your feature branch:
+    ```bash
+    git checkout -b feature/YourFeature
+    ```
+2. **Commit your changes** with clear messages.
+3. **Push to your fork** and submit a pull request.
+4. **Describe your changes** and reference related issues if applicable.
 
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
 
-## Acknowledgments
+## Support & Contact
 
-Special thanks to the Merrimack College community for contributing to the development of this knowledgebase platform.
+For questions, suggestions, or issues, please open an issue on GitHub or contact the club directly.
 
 ---
 
-Thank you for your interest and contribution to the Merrimack College Knowledgebase React Project! If you have any questions or encounter issues, feel free to reach out to our support team.
+Thank you for supporting the Merrimack College Computer Club Knowledgebase! Your contributions help foster a vibrant tech community on campus.
