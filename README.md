@@ -127,3 +127,7 @@ For questions, suggestions, or issues, please open an issue on GitHub or contact
 ---
 
 Thank you for supporting the Merrimack College Computer Club Knowledgebase! Your contributions help foster a vibrant tech community on campus.
+
+## Questions
+If you have any questions please reach out to one of the Merrimack Computer Club eboard members in the [Discord](https://discord.gg/FdATJDYBPP).
+If you have information about the project structure or want some extra help reach out to Alexander Elguezabal @ `aelguezabal@microsoft.com`.
