@@ -106,6 +106,97 @@ The Merrimack College Computer Club Knowledgebase is a full-stack web applicatio
 └── README.md
 ```
 
+## Firebase Deployment
+
+### How Deployment Works
+
+This project uses [Firebase Hosting](https://firebase.google.com/docs/hosting) for fast and secure web hosting. To deploy your changes:
+
+1. **Install the Firebase CLI** (if you haven’t already):
+    ```bash
+    npm install -g firebase-tools
+    ```
+
+2. **Login to Firebase:**
+    ```bash
+    firebase login
+    ```
+
+3. **Initialize Firebase (first time only):**
+    ```bash
+    firebase init
+    ```
+    - Choose **Hosting** and link to your Firebase project.
+    - Set `build` as your public directory.
+    - Configure as a single-page app (rewrite all URLs to `/index.html`).
+
+4. **Build your React app:**
+    ```bash
+    npm run build
+    ```
+
+5. **Deploy to Firebase Hosting:**
+    ```bash
+    firebase deploy
+    ```
+
+Your site will be live at the Firebase Hosting URL provided in the console output.
+
+---
+
+## Firebase Realtime Database Structure
+
+The app uses Firebase Realtime Database to store posts, comments, and user profiles. The structure is as follows:
+
+```
+{
+  "posts": {
+    "postId123": {
+      "title": "How to use React",
+      "content": "<p>Rich text content...</p>",
+      "author": "userId456",
+      "tags": ["react", "frontend"],
+      "createdAt": 1680000000000,
+      "resources": ["https://react.dev/"],
+      "comments": {
+        "commentId789": {
+          "author": "userId456",
+          "content": "Great post!",
+          "createdAt": 1680000001000
+        }
+      }
+    }
+  },
+  "users": {
+    "userId456": {
+      "name": "Jane Doe",
+      "email": "janedoe@merrimack.edu",
+      "profilePic": "https://...",
+      "bio": "Computer Science Major",
+      "interests": ["AI", "Web Development"]
+    }
+  },
+  "comments": {
+    "commentId789": {
+      "postId": "postId123",
+      "author": "userId456",
+      "content": "Great post!",
+      "createdAt": 1680000001000
+    }
+  }
+}
+```
+
+- **posts:** Contains all knowledgebase posts, each with its own comments.
+- **users:** Stores member profiles and metadata.
+- **comments:** (Optional) Centralized comment storage for quick lookup.
+
+> **Note:** The actual structure may vary slightly based on app updates. See [`src/pages/firebaseConfig.js`](src/pages/firebaseConfig.js) for configuration details.
+
+---
+
+For more details on Firebase setup, see the [Firebase documentation](https://firebase.google.com/docs/database).
+
 ## Contribution Guidelines
 
 1. **Fork the repository** and create your feature branch:
