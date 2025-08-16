@@ -20,7 +20,7 @@ Welcome to the Merrimack College Knowledgebase React Project! This project aims 
 
 2. **Navigate to the project directory:**
     ```bash
-    cd elguezabal_brown_vanhecke_3950_final
+    cd Merrimack_Computer_Club_Website
     ```
 
 3. **Install dependencies:**

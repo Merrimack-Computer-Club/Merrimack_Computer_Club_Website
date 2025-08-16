@@ -10,6 +10,7 @@ import Knowledgebase from './pages/Knowledgebase'
 import Login from './pages/Login'
 import User from './pages/User'
 import Members from './pages/Members'
+import Interest from './pages/Interest'
 
 import {
   BrowserRouter as Router,
@@ -57,6 +58,7 @@ function App() {
             <Route path="/login" element={<Login setLoggedIn={setLoggedIn} />}/>
             <Route path="/user" element={<User />} />
             <Route path="/members" element={<Members />} />
+            <Route path="/interest" element={<Interest />} />
           </Routes>
           </div>
           <Footer/>
