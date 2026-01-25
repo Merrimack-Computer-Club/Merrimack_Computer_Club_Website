@@ -87,12 +87,13 @@ ul {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: white;
+    background-color: var(--navbar-bg);
     position: fixed;
     top: 10px;
     width: 100%;
     padding-bottom: 5px;
     justify-content: flex-start;
+    transition: background-color 0.3s ease;
 }
 
 ul Button {
@@ -118,13 +119,14 @@ li {
 
 li a {
     display: block;
-    color: black;
+    color: var(--text-primary);
     font-family: var(--poppinsBold);
     font-size: 1.25rem;
     text-align: center;
     padding: 0px 15px;
     text-decoration: none;
     font-weight: bold;
+    transition: color 0.3s ease;
 }
 
 li a span:hover {
@@ -153,5 +155,18 @@ li a span:hover {
     ul Button h1 {
         font-size: .75rem;
         padding: 0px;
+    }
+}
+
+/* Theme Toggle Styles */
+.theme-toggle {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+@media screen and (max-width: 768px) {
+    .theme-toggle {
+        margin: 10px 0;
     }
 }

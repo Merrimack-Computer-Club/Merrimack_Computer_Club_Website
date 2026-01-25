@@ -4,8 +4,11 @@
     align-items: center;
     margin-left: 10%;
     margin-right: 10%;
+    color: var(--text-primary);
+    transition: color 0.3s ease;
 }
 
 .content-container-inner {
     border: 10px 10px 10px 10px;
+    color: var(--text-primary);
 }

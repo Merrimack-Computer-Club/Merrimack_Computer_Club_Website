@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MantineProvider } from "@mantine/core";
+import { useLocalStorage, useColorScheme } from '@mantine/hooks';
 import '@mantine/core/styles.css';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import Navbar from "./components/Navbar";
@@ -20,6 +21,27 @@ import {
 
 function App() {
   const [isLoggedIn, setLoggedIn] = useState(false);
+  
+  // Detect system/browser color scheme preference (inherits from OS/Google settings)
+  const preferredColorScheme = useColorScheme();
+  
+  const [colorScheme, setColorScheme] = useLocalStorage({
+    key: 'mantine-color-scheme',
+    defaultValue: preferredColorScheme,
+    getInitialValueInEffect: false,
+  });
+
+  // Update color scheme if system preference changes and user hasn't manually set one
+  useEffect(() => {
+    const hasUserPreference = localStorage.getItem('mantine-color-scheme');
+    if (!hasUserPreference) {
+      setColorScheme(preferredColorScheme);
+    }
+  }, [preferredColorScheme, setColorScheme]);
+
+  const toggleColorScheme = () => {
+    setColorScheme(colorScheme === 'dark' ? 'light' : 'dark');
+  };
 
   useEffect(() => {
     const checkLoginStatus = async () => {
@@ -48,9 +70,14 @@ function App() {
 
   return (
     <GoogleOAuthProvider clientId="1052801351450-injkge7jr3h8gj19f16pbe81ktu9ruo2.apps.googleusercontent.com">
-      <MantineProvider defaultColorScheme="light">
+      <MantineProvider defaultColorScheme={colorScheme} forceColorScheme={colorScheme}>
         <Router>
-          <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
+          <Navbar 
+            isLoggedIn={isLoggedIn} 
+            onLogout={handleLogout}
+            colorScheme={colorScheme}
+            toggleColorScheme={toggleColorScheme}
+          />
           <div id='web-content'>
           <Routes>
             <Route exact path="/" element={<Home />} />

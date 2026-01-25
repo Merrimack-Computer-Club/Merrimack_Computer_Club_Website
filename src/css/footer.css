@@ -32,13 +32,14 @@
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: white;
+    background-color: var(--navbar-bg);
     position: relative;
     bottom: 10px;
     width: 100%;
     padding-bottom: 5px;
     display: flex;
     justify-content: center;
+    transition: background-color 0.3s ease;
 }
 
 ul Button {
@@ -66,13 +67,14 @@ li {
 
 li a {
     display: block;
-    color: black;
+    color: var(--text-primary);
     font-family: var(--poppinsBold);
     font-size: 1.25rem;
     text-align: center;
     padding: 0px 15px;
     text-decoration: none;
     font-weight: bold;
+    transition: color 0.3s ease;
 }
 
 li a span:hover {
@@ -102,4 +104,123 @@ li a span:hover {
         font-size: .75rem;
         padding: 0px;
     }
+}
+
+/* Easter Egg Animation Styles */
+.easter-egg-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 9999;
+    overflow: hidden;
+}
+
+.rolling-friend {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    border-radius: 50%;
+    animation: rollAround 8s linear forwards;
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
+}
+
+.easter-egg-text {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3rem;
+    font-family: var(--poppinsBold);
+    color: #ff6b6b;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    animation: textPop 0.5s ease-out 1s forwards, textFade 1s ease-out 3s forwards;
+    opacity: 0;
+    z-index: 10000;
+}
+
+@keyframes rollAround {
+    0% {
+        top: 110%;
+        left: -150px;
+        transform: rotate(0deg);
+    }
+    15% {
+        top: 70%;
+        left: 30%;
+        transform: rotate(360deg);
+    }
+    25% {
+        top: 20%;
+        left: 50%;
+        transform: rotate(720deg);
+    }
+    35% {
+        top: 50%;
+        left: 80%;
+        transform: rotate(1080deg);
+    }
+    50% {
+        top: 30%;
+        left: 20%;
+        transform: rotate(1440deg);
+    }
+    65% {
+        top: 60%;
+        left: 60%;
+        transform: rotate(1800deg);
+    }
+    80% {
+        top: 40%;
+        left: 10%;
+        transform: rotate(2160deg);
+    }
+    100% {
+        top: -200px;
+        left: 110%;
+        transform: rotate(2880deg);
+    }
+}
+
+@keyframes textPop {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.5);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+@keyframes textFade {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+/* Add some bounce effect */
+.rolling-friend {
+    animation: rollAround 8s linear forwards, bounce 0.3s ease-in-out infinite;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0) rotate(var(--current-rotation, 0deg));
+    }
+    50% {
+        transform: translateY(-10px) rotate(var(--current-rotation, 0deg));
+    }
+}
+
+/* Dark mode adjustments */
+[data-mantine-color-scheme="dark"] .easter-egg-text {
+    color: #ff8787;
+    text-shadow: 2px 2px 8px rgba(255, 255, 255, 0.3);
 }

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Button, Image } from '@mantine/core';
+import { Button, Image, Switch, useMantineColorScheme } from '@mantine/core';
+import { IconSun, IconMoon } from '@tabler/icons-react';
 import '../css/variables.css';
 import '../css/navbar.css';
 import { Link } from 'react-router-dom';
 
-function Navbar({ isLoggedIn, onLogout }) {
+function Navbar({ isLoggedIn, onLogout, colorScheme, toggleColorScheme }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const logo_path = './merrimack-computer-club-removebg-preview.png';
@@ -34,6 +35,23 @@ function Navbar({ isLoggedIn, onLogout }) {
         <li><a href="/members"><span>Members</span></a></li>
         <li><a href="/user"><span>Profile</span></a></li>
         <li><a href="/interest"><span>Interest</span></a></li>
+        
+        {/* Theme Toggle Switch */}
+        <li className="theme-toggle">
+          <Switch
+            checked={colorScheme === 'dark'}
+            onChange={toggleColorScheme}
+            size="lg"
+            onLabel={<IconSun size={16} stroke={2.5} color="yellow" />}
+            offLabel={<IconMoon size={16} stroke={2.5} color="blue" />}
+            styles={{
+              track: {
+                cursor: 'pointer',
+              },
+            }}
+          />
+        </li>
+
         {isLoggedIn ? (
           <li>
             <Button style={{ borderRadius: '20px', paddingTop: '5px' }} onClick={onLogout}>
