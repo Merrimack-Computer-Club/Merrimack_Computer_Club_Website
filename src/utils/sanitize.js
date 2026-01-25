@@ -65,12 +65,20 @@ export const sanitizeEmail = (email) => {
  * @returns {boolean} - True if valid Merrimack email
  */
 export const isValidMerrimackEmail = (email) => {
-  const sanitized = sanitizeEmail(email);
-  if (!sanitized) {
+  if (!email || typeof email !== 'string') {
     return false;
   }
   
-  return sanitized.endsWith('@merrimack.edu');
+  const trimmedEmail = email.trim().toLowerCase();
+  
+  // Check domain first
+  if (!trimmedEmail.endsWith('@merrimack.edu')) {
+    return false;
+  }
+  
+  // Then validate email format
+  const sanitized = sanitizeEmail(trimmedEmail);
+  return sanitized !== null;
 };
 
 /**
@@ -86,7 +94,7 @@ export const sanitizeDatabasePath = (path) => {
   // Remove special Firebase characters and ensure safe path
   // Firebase doesn't allow: . $ # [ ] /
   return path
-    .replace(/[.$#[\]/]/g, '_')
+    .replace(/[.$#[\]\/]/g, '_')
     .trim()
     .substring(0, 200); // Limit length
 };

@@ -59,7 +59,7 @@
           ".validate": "newData.isNumber()"
         },
         "tags": {
-          ".validate": "newData.hasChildren() && newData.val().length <= 10"
+          ".validate": "newData.hasChildren() && newData.numChildren() <= 10"
         },
         "resources": {
           ".validate": "newData.hasChildren()"
