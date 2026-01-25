@@ -1,6 +1,7 @@
 import { React, useEffect, useState } from 'react'
 import CreatePostForm from "../components/CreatePostForm";
 import Post from "../components/Post"
+import ArticleList from "../components/ArticleList"
 import { Autocomplete } from '@mantine/core';
 import { database } from './firebaseConfig';
 import { ref, onValue } from "firebase/database";
@@ -55,6 +56,15 @@ function Knowledgebase(props) {
       }
   }
 
+  /**
+   * Called when an article is clicked from the ArticleList
+   * @param {string} title - The title of the article to display
+   */
+  function handleArticleClick(title) {
+      setSearch(title);
+      setDisplayedPosts(posts.filter(n => n.title !== null && n.title !== undefined && n.title === title));
+  }
+
   return (
 
     <div className='knowledgebase'>
@@ -67,12 +77,23 @@ function Knowledgebase(props) {
         comboboxProps={{ shadow: 'md', transitionProps: { transition: 'pop', duration: 200 } }}/>
       </div>
 
-      {/* Display a list of posts from displayedPosts */}
-      <div className='posts' style={{ paddingTop: '60px', height: 'fit-content' }}>
-        {displayedPosts.map((n) => {     
-           return (<Post key={n.title} userID={n.maintainer} userEmail={n.maintainer_email} createTime={n.creationTime} updateTime={n.updateTime} information={n.information} title={n.title} tags={n.tags} resources={n.resources} in_comments={n.in_comments} />  
-           ) 
-        })}
+      {/* Main content area with sidebar and posts */}
+      <div className='knowledgebase-content'>
+        {/* Left sidebar with article list */}
+        <div className='article-sidebar'>
+          <ArticleList posts={posts} onArticleClick={handleArticleClick} />
+        </div>
+
+        {/* Right side with displayed posts */}
+        <div className='posts-main'>
+          {/* Display a list of posts from displayedPosts */}
+          <div className='posts' style={{ paddingTop: '20px', height: 'fit-content' }}>
+            {displayedPosts.map((n) => {     
+               return (<Post key={n.title} userID={n.maintainer} userEmail={n.maintainer_email} createTime={n.creationTime} updateTime={n.updateTime} information={n.information} title={n.title} tags={n.tags} resources={n.resources} in_comments={n.in_comments} />  
+               ) 
+            })}
+          </div>
+        </div>
       </div>
 
       <CreatePostForm></CreatePostForm>
