@@ -25,7 +25,7 @@ function Footer() {
         setHasTriggered(true);
 
         // 1 in 3 random chance to show Easter egg
-        const randomChance = Math.floor(Math.random() * 3) + 1;
+        const randomChance = Math.floor(Math.random() * 1) + 1;
         if (randomChance === 1) {
           setShowEasterEgg(true);
           
