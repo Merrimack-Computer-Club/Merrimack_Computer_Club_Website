@@ -51,15 +51,20 @@ The Merrimack College Computer Club Knowledgebase is a full-stack web applicatio
 ### Configuration
 
 1. **Environment Variables:**
-    - Create a `.env` file in the project root:
+    - Copy `.env.example` to `.env`:
       ```bash
-      PORT=5000
+      cp .env.example .env
       ```
-    - (Optional) Add other environment variables as needed for local development.
+    - Fill in your Firebase project credentials in the `.env` file
+    - **IMPORTANT:** Never commit the `.env` file to version control
+    - For production deployment, set these environment variables in your hosting platform
 
 2. **Firebase Setup:**
-    - The project is pre-configured for the Merrimack Computer Club Firebase project.
-    - If you wish to use your own Firebase project, update the configuration in [`src/pages/firebaseConfig.js`](src/pages/firebaseConfig.js).
+    - The project requires Firebase configuration via environment variables
+    - Get your Firebase credentials from [Firebase Console](https://console.firebase.google.com/) > Project Settings
+    - Update the `.env` file with your Firebase project credentials
+    - Deploy Firebase security rules: `firebase deploy --only database`
+    - See [`SECURITY.md`](SECURITY.md) for detailed security configuration
 
 ### Usage
 
@@ -126,21 +131,39 @@ This project uses [Firebase Hosting](https://firebase.google.com/docs/hosting) f
     ```bash
     firebase init
     ```
-    - Choose **Hosting** and link to your Firebase project.
-    - Set `build` as your public directory.
-    - Configure as a single-page app (rewrite all URLs to `/index.html`).
+    - Choose **Hosting** and **Database** 
+    - Link to your Firebase project
+    - Set `build` as your public directory
+    - Configure as a single-page app (rewrite all URLs to `/index.html`)
 
 4. **Build your React app:**
     ```bash
     npm run build
     ```
 
-5. **Deploy to Firebase Hosting:**
+5. **Deploy to Firebase (Hosting and Security Rules):**
     ```bash
     firebase deploy
     ```
+    Or deploy individually:
+    ```bash
+    firebase deploy --only hosting
+    firebase deploy --only database
+    ```
+
+6. **Set Environment Variables for Production:**
+    - For Firebase Hosting, environment variables are built into the app during `npm run build`
+    - Ensure your CI/CD pipeline or local environment has the correct `.env` file before building
 
 Your site will be live at the Firebase Hosting URL provided in the console output.
+
+### Security
+
+**Important:** Before deploying, ensure you have:
+- Set up environment variables correctly
+- Deployed Firebase security rules: `firebase deploy --only database`
+- Reviewed [`SECURITY.md`](SECURITY.md) for security best practices
+- Never committed `.env` files to version control
 
 ---
 
@@ -196,6 +219,17 @@ The app uses Firebase Realtime Database to store posts, comments, and user profi
 ---
 
 For more details on Firebase setup, see the [Firebase documentation](https://firebase.google.com/docs/database).
+
+## Security
+
+This project implements several security measures to protect user data and prevent common web vulnerabilities:
+
+- **Environment Variables:** Sensitive Firebase configuration is stored in environment variables
+- **Firebase Security Rules:** Comprehensive database rules enforce authentication and authorization
+- **Input Sanitization:** All user inputs are sanitized to prevent XSS attacks
+- **Email Validation:** Only @merrimack.edu emails are allowed
+
+For detailed security information, implementation details, and best practices, see [`SECURITY.md`](SECURITY.md).
 
 ## Contribution Guidelines
 
