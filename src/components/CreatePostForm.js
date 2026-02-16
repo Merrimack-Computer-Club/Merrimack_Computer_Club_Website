@@ -6,6 +6,7 @@ import { useForm } from '@mantine/form';
 import { TextInput, Text, Button, Group, Box, TagsInput } from '@mantine/core';
 import { app, database } from '../pages/firebaseConfig';
 import { getDatabase, ref, onValue, push, child, update, set} from "firebase/database";
+import { sanitizeHtml, sanitizeText, sanitizeDatabasePath } from '../utils/sanitize';
 
 function CreatePostForm() {
 
@@ -41,10 +42,10 @@ function CreatePostForm() {
         },
 
         transformValues: (values) => ({
-            title: `${values.title}`,
-            information: `${values.information}`,
+            title: sanitizeText(values.title),
+            information: sanitizeHtml(values.information),
             resources: values.resources.split(","), // Array of resources separated by ,
-            tags: values.tags, // Array of tags separated by
+            tags: values.tags.map(tag => sanitizeText(tag)), // Sanitize each tag
             maintainer: getUserID(),
             maintainer_email: getEmail(),
             creationTime: Date.now(),
@@ -88,8 +89,11 @@ function CreatePostForm() {
 
             const db = database;
       
-            // Construct the path
-            const path = `knowledgebase/${values.title}`;
+            // Sanitize the title for use as a database path
+            const sanitizedTitle = sanitizeDatabasePath(values.title);
+            
+            // Construct the path with sanitized title
+            const path = `knowledgebase/${sanitizedTitle}`;
 
             onValue(ref(db, path), async (snapshot) => {
                 if(snapshot.exists()) {

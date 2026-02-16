@@ -6,6 +6,7 @@ import { Text, Button, TagsInput, Collapse, TextInput, Divider } from '@mantine/
 import { app, database } from '../pages/firebaseConfig';
 import { getDatabase, ref, onValue, push, child, update, get, set, remove} from "firebase/database";
 import Comment from "./Comment";
+import { sanitizeHtml, sanitizeText, sanitizeDatabasePath } from '../utils/sanitize';
 
 /**
  * @param {*} postID Represents the UUID for this post
@@ -50,16 +51,26 @@ function Post({ userID, userEmail, createTime, updateTime, information, title, t
     // Called when the save button is clicked, this then updates realtime-database
     function saveClicked() {
 
+        // Sanitize the content before saving
+        const sanitizedValue = sanitizeHtml(value);
+        const sanitizedTitle = sanitizeDatabasePath(title);
+        
         // Update the reference in the database
-        update(ref(database, `knowledgebase/${title}`), {information: value, updateTime: Date.now()});
+        update(ref(database, `knowledgebase/${sanitizedTitle}`), {
+            information: sanitizedValue, 
+            updateTime: Date.now()
+        });
 
+        setValue(sanitizedValue);
         setEditing(false);
     }
 
     // Called when the delete button is pressed on a post
     function deleteClicked() {
 
-        remove(ref(database, `knowledgebase/${title}`)).then(() => {
+        const sanitizedTitle = sanitizeDatabasePath(title);
+        
+        remove(ref(database, `knowledgebase/${sanitizedTitle}`)).then(() => {
             setEditing(false);
             refreshPage();
         });
@@ -102,6 +113,10 @@ function Post({ userID, userEmail, createTime, updateTime, information, title, t
         try {
             const db = database;
             
+            // Sanitize comment text
+            const sanitizedComment = sanitizeText(comment);
+            const sanitizedTitle = sanitizeDatabasePath(title);
+            
             // Get the comments array
             var temp = (comments !== undefined && comments !== null) ? comments : {};
             
@@ -109,12 +124,12 @@ function Post({ userID, userEmail, createTime, updateTime, information, title, t
             const commentTemp = {
                 commenter: getUserID(),
                 commenter_email: getEmail(),
-                comment: comment,
+                comment: sanitizedComment,
                 creationTime: Date.now()
             }
 
             temp[Object.keys(temp).length == 0 ? 0 : (Object.keys(temp).length)] = commentTemp;
-            update(ref(database, `knowledgebase/${title}`), {in_comments: temp});
+            update(ref(database, `knowledgebase/${sanitizedTitle}`), {in_comments: temp});
 
             setComments(temp);
             setComment('');
@@ -140,7 +155,9 @@ function Post({ userID, userEmail, createTime, updateTime, information, title, t
      * Removes this comment from the post
      */
     function removeComment(idx) {
-        remove(ref(database, `knowledgebase/${title}/in_comments/${idx}`)).then(() => {
+        const sanitizedTitle = sanitizeDatabasePath(title);
+        
+        remove(ref(database, `knowledgebase/${sanitizedTitle}/in_comments/${idx}`)).then(() => {
             console.log(`Comment ${idx} removed`);
 
             // Remove the item from the parents comments state.

@@ -4,6 +4,7 @@ import { database } from '../pages/firebaseConfig';
 import { onValue, ref, set, update} from 'firebase/database';
 import Post from '../components/Post';
 import '../css/knowledgebase.css';
+import { sanitizeDatabasePath } from '../utils/sanitize';
 
 function getRandomColor() {
   const letters = '0123456789ABCDEF';
@@ -94,7 +95,9 @@ function User() {
   useEffect(() => {
     const fetchUserData = async () => {
       if (user) {
-        const userRef = ref(database, `users/${user.split('@')[0].replace(/\./g, ',')}`);
+        const userKey = user.split('@')[0].replace(/\./g, ',');
+        const sanitizedKey = sanitizeDatabasePath(userKey);
+        const userRef = ref(database, `users/${sanitizedKey}`);
         onValue(userRef, (snapshot) => {
           const userData = snapshot.val();
           if (userData) {
@@ -116,8 +119,11 @@ function User() {
    */
   function setDisplayHandler(value) {
 
+    // Sanitize the userID before using in database path
+    const sanitizedUserID = sanitizeDatabasePath(userID);
+    
     // Update firebase with the display value
-    update(ref(database, `users/${userID}`), {display: value});
+    update(ref(database, `users/${sanitizedUserID}`), {display: value});
 
     // Update the state
     setDisplay(value);

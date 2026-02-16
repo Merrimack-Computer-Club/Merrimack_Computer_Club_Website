@@ -6,6 +6,7 @@ import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from "react-router-dom";
 import { set, ref } from 'firebase/database';  
 import '../css/login.css';
+import { sanitizeText, sanitizeEmail, isValidMerrimackEmail, sanitizeDatabasePath } from '../utils/sanitize';
 
 function Login({ setLoggedIn }) {
   const [email, setEmail] = useState(null);
@@ -20,31 +21,43 @@ function Login({ setLoggedIn }) {
 
   const addUserToFirebase = async (email, firstName, lastName, user_description, avatar) => {
     try {
+      // Validate and sanitize email
+      const sanitizedEmail = sanitizeEmail(email);
+      if (!sanitizedEmail || !isValidMerrimackEmail(sanitizedEmail)) {
+        setError("Invalid email address");
+        return;
+      }
+      
       // Get a reference to the Realtime Database
       const db = database;
   
       // Use the email before "@merrimack.edu" as the Firebase key
-      const firebaseKey = email.split('@')[0].replace(/\./g, ",");
+      const firebaseKey = sanitizedEmail.split('@')[0].replace(/\./g, ",");
       console.log("Firebase Key:", firebaseKey);
   
+      // Sanitize the key for database path
+      const sanitizedKey = sanitizeDatabasePath(firebaseKey);
+      
       // Construct the path
-      const path = `users/${firebaseKey}`;
+      const path = `users/${sanitizedKey}`;
       console.log("Firebase Path:", path);
   
       // Update the localStorage to contain the userid
-      localStorage.setItem("userid", firebaseKey);
+      localStorage.setItem("userid", sanitizedKey);
   
-      // Provide default values for user_description and avatar if not set
-      const defaultUserDescription = "User description not set, please update your profile.";
-      const defaultAvatar = "path-to-default-avatar.jpg";
+      // Sanitize user inputs
+      const sanitizedFirstName = sanitizeText(firstName);
+      const sanitizedLastName = sanitizeText(lastName);
+      const sanitizedDescription = user_description ? sanitizeText(user_description) : "User description not set, please update your profile.";
+      const sanitizedAvatar = avatar ? sanitizeText(avatar) : "path-to-default-avatar.jpg";
   
       // Use the set function on the reference to add data to the path
       await set(ref(db, path), {
-        email: email,
-        firstName: firstName,
-        lastName: lastName,
-        user_description: user_description || defaultUserDescription,
-        avatar: avatar || defaultAvatar,
+        email: sanitizedEmail,
+        firstName: sanitizedFirstName,
+        lastName: sanitizedLastName,
+        user_description: sanitizedDescription,
+        avatar: sanitizedAvatar,
         display: true,
       });
   

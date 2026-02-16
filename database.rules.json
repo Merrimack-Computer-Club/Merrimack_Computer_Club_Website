@@ -1,0 +1,91 @@
+{
+  "rules": {
+    ".read": "auth != null",
+    ".write": "auth != null",
+    
+    "users": {
+      "$userId": {
+        ".read": true,
+        ".write": "auth != null && (
+          !data.exists() || 
+          data.child('email').val() == auth.token.email
+        )",
+        ".validate": "newData.hasChildren(['email', 'firstName', 'lastName'])",
+        "email": {
+          ".validate": "newData.isString() && newData.val().matches(/.*@merrimack\\.edu$/)"
+        },
+        "firstName": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 100"
+        },
+        "lastName": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 100"
+        },
+        "user_description": {
+          ".validate": "newData.isString() && newData.val().length <= 1000"
+        },
+        "avatar": {
+          ".validate": "newData.isString() && newData.val().length <= 500"
+        },
+        "display": {
+          ".validate": "newData.isBoolean()"
+        }
+      }
+    },
+    
+    "knowledgebase": {
+      ".read": "auth != null",
+      "$postId": {
+        ".write": "auth != null && (
+          !data.exists() || 
+          data.child('maintainer_email').val() == auth.token.email
+        )",
+        ".validate": "newData.hasChildren(['title', 'information', 'maintainer', 'maintainer_email', 'creationTime', 'updateTime'])",
+        "title": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 200"
+        },
+        "information": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 50000"
+        },
+        "maintainer": {
+          ".validate": "newData.isString()"
+        },
+        "maintainer_email": {
+          ".validate": "newData.isString() && newData.val().matches(/.*@merrimack\\.edu$/) && newData.val() == auth.token.email"
+        },
+        "creationTime": {
+          ".validate": "newData.isNumber()"
+        },
+        "updateTime": {
+          ".validate": "newData.isNumber()"
+        },
+        "tags": {
+          ".validate": "newData.hasChildren() && newData.numChildren() <= 10"
+        },
+        "resources": {
+          ".validate": "newData.hasChildren()"
+        },
+        "in_comments": {
+          "$commentId": {
+            ".write": "auth != null && (
+              !data.exists() || 
+              data.child('commenter_email').val() == auth.token.email
+            )",
+            ".validate": "newData.hasChildren(['commenter', 'commenter_email', 'comment', 'creationTime'])",
+            "commenter": {
+              ".validate": "newData.isString()"
+            },
+            "commenter_email": {
+              ".validate": "newData.isString() && newData.val().matches(/.*@merrimack\\.edu$/) && newData.val() == auth.token.email"
+            },
+            "comment": {
+              ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 5000"
+            },
+            "creationTime": {
+              ".validate": "newData.isNumber()"
+            }
+          }
+        }
+      }
+    }
+  }
+}
